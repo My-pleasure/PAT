@@ -1,0 +1,26 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+int main()
+{
+	float W[3], T[3], L[3];
+	float M;
+	float sum = 1;
+	for (int i = 0; i < 3; ++i)
+		cin >> W[i] >> T[i] >> L[i];
+	for (int i = 0; i < 3; ++i)
+	{
+		M = max(W[i], max(T[i], L[i]));
+		sum *= M;
+		if (M == W[i])
+			cout << "W ";
+		if (M == T[i])
+			cout << "T ";
+		if (M == L[i])
+			cout << "L ";
+	}
+	sum = (sum*0.65 - 1) * 2;
+	cout << sum;
+	//代码精度问题
+	//printf("%.2f",sum);
+}
