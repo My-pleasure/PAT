@@ -1,0 +1,29 @@
+#include <iostream>
+using namespace std;
+int main()
+{
+	int a[100], i, sum = 0, j = 1;
+	int N;
+	cin >> N;
+	for (i = 0; i < N; ++i)
+	{
+		cin >> a[i];
+	}
+	if (i == 0)
+		cout << 6 * a[0] + 5;
+	else
+	{
+		sum = 6 * a[0];
+		while (j < i)
+		{
+			if (a[j] < a[j - 1])
+				sum += 4 * (a[j - 1] - a[j]);
+			else
+				sum += 6 * (a[j] - a[j - 1]);
+			++j;
+			sum += 5;
+		}
+		sum += 5;
+	}
+	cout << sum;
+}
