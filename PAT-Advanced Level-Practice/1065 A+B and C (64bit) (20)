@@ -1,0 +1,22 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	long long A[11], B[11], C[11], D[11];
+	int T;
+	cin >> T;
+	for (int i = 0; i < T; ++i)
+		cin >> A[i] >> B[i] >> C[i];
+	for (int j = 0; j < T; ++j)
+	{
+		D[j] = A[j] + B[j];
+		if (A[j] > 0 && B[j] > 0 && D[j] < 0)
+			cout << "Case #" << j + 1 << ": true" << endl;
+		else if (A[j] < 0 && B[j] < 0 && D[j] >= 0)
+			cout << "Case #" << j + 1 << ": false" << endl;
+		else if (A[j] + B[j] > C[j])
+			cout << "Case #" << j + 1 << ": true" << endl;
+		else
+			cout << "Case #" << j + 1 << ": false" << endl;
+	}
+}
