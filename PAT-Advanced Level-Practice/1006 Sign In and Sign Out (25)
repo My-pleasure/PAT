@@ -1,0 +1,39 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+typedef struct
+{
+	int h;
+	int m;
+	int s;
+}ti;
+typedef struct
+{
+	char name[15];
+	ti sign_in;
+	ti sign_out;
+}stu;
+bool cmp1(stu s1,stu s2)
+{
+	if (s1.sign_in.h != s2.sign_in.h) return s1.sign_in.h < s2.sign_in.h;
+	else if (s1.sign_in.m != s2.sign_in.m) return s1.sign_in.m < s2.sign_in.m;
+	else return s1.sign_in.s < s2.sign_in.s;
+}
+bool cmp2(stu s1, stu s2)
+{
+	if (s1.sign_out.h != s2.sign_out.h) return s1.sign_out.h > s2.sign_out.h;
+	else if (s1.sign_out.m != s2.sign_out.m) return s1.sign_out.m > s2.sign_out.m;
+	else return s1.sign_out.s > s2.sign_out.s;
+}
+int main()
+{
+	stu s[101];
+	int num;
+	cin >> num;
+	for (int i = 0; i < num; ++i)
+		scanf("%s %d:%d:%d %d:%d:%d", s[i].name, &s[i].sign_in.h, &s[i].sign_in.m, &s[i].sign_in.s, &s[i].sign_out.h, &s[i].sign_out.m, &s[i].sign_out.s);
+	sort(s,s+num, cmp1);
+	printf("%s ", s[0].name);
+	sort(s, s + num, cmp2);
+	printf("%s", s[0].name);
+}
