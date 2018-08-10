@@ -1,0 +1,34 @@
+#include<iostream>
+using namespace std;
+typedef struct
+{
+	int ex;
+	float co;
+}polo;
+int main()
+{
+	float p[2001] = { 0 };
+	polo x[11], y[11];
+	int xn, yn, k = 0, a[101];
+	int num = 0;
+	cin >> xn;
+	for (int i = 0; i < xn; ++i)
+		cin >> x[i].ex >> x[i].co;
+	cin >> yn;
+	for (int j = 0; j < yn; ++j)
+		cin >> y[j].ex >> y[j].co;
+	for (int i = 0; i < xn; ++i)
+		for (int j = 0; j < yn; ++j)
+			p[x[i].ex + y[j].ex] += x[i].co * y[j].co;
+	for (k = 0; k < 2001; ++k)
+	{
+		if (p[k] != 0)
+		{
+			a[num] = k;
+			++num;
+		}
+	}
+	cout << num;
+	for (int i = num - 1; i >= 0; --i)
+		printf(" %d %.1f", a[i], p[a[i]]);
+}
