@@ -1,0 +1,47 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main()
+{
+	ios::sync_with_stdio(false);
+	string s[4];
+	char d[7][5] = { "MON ","TUE ","WED ","THU ","FRI ","SAT ","SUN " };
+	int i = 0, j = 0;
+	int day;
+	int flag_day = 0;
+	for (int k = 0; k < 4; ++k)
+		cin >> s[k];
+	while (i < s[0].length() && i < s[1].length())
+	{
+		if (flag_day == 0 && s[0][i] == s[1][i] && s[0][i] >= 'A'&&s[0][i] <= 'G')
+		{
+			day = (int)s[0][i] - 65;
+			printf("%s", d[day]);
+			flag_day = 1;
+			continue;
+		}
+		if (flag_day == 1 && s[0][i] == s[1][i] )
+		{
+			if (s[0][i] >= '0'&&s[0][i] <= '9')
+			{
+				printf("%02d", (int)s[0][i]-48);
+				break;
+			}
+			else if (s[0][i] >= 'A'&&s[0][i] <= 'N')
+			{
+				printf("%d", (int)s[0][i] - 55);
+				break;
+			}
+		}
+		++i;
+	}
+	while (j < s[2].length() && j < s[3].length())
+	{
+		if (s[2][j] == s[3][j]&&((s[2][j]>='A'&&s[2][j]<='Z')||(s[2][j]>='a'&&s[2][j]<='z')))
+		{
+			printf(":%02d", j);
+			break;
+		}
+		++j;
+	}
+}
