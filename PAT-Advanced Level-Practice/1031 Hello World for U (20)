@@ -1,0 +1,28 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main()
+{
+	int n1 = 1, n2;
+	string s;
+	cin >> s;
+	do
+	{
+		n2 = s.length() - 2 * n1;
+		if (n1 >= n2)
+			break;
+		else
+			++n1;
+	} while (1);
+	--n1;
+	n2 = s.length() - 2 * n1;
+	for (int i = 0; i < n1; ++i)
+	{
+		cout << s[i];
+		for (int j = 0; j < n2 - 2; ++j)
+			cout << " ";
+		cout << s[s.length() - i - 1] << endl;
+	}
+	for (int i = n1; i < s.length() - n1; ++i)
+		cout << s[i];
+}
