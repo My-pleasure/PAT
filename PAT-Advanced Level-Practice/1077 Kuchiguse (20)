@@ -1,0 +1,52 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main()
+{
+	ios::sync_with_stdio(false);
+	string s[101];
+	string temp;
+	int t;
+	int N;
+	int i, j;
+	cin >> N;
+	cin.get();
+	for (int i = 0; i < N; ++i)
+	{
+		getline(cin, temp);
+		s[i] = temp;
+	}
+	for (i = s[0].length() - 1, j = s[1].length() - 1; i >= 0, j >= 0; --i, --j)
+	{
+		if (s[0][i] != s[1][j] || (s[0][i] == ' '&&i != 0 && s[0][i - 1] != s[1][j - 1]))
+			break;
+	}
+	if (i != s[0].length() - 1)
+		temp = s[0].substr(i + 1, s[0].length() - i);
+	else
+	{
+		printf("%s", "nai");
+		return 0;
+	}
+	if (N > 2)
+	{
+		for (j = 2; j < N; ++j)
+		{
+			do
+			{
+				t = s[j].find(temp);
+				if (t == -1)
+					temp.erase(temp.begin());
+				else break;
+			} while (temp.length() != 0);
+			if (temp.length() == 0)
+			{
+				printf("%s", "nai");
+				return 0;
+			}
+		}
+		cout << temp;
+	}
+	else
+		cout << temp;
+}
