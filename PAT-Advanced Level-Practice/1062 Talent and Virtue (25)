@@ -1,0 +1,72 @@
+#include<iostream>
+#include<cstring>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+
+int N;
+int L, H;
+
+typedef struct
+{
+	char id[10];
+	int ta;
+	int vi;
+	int sum;
+	int flag;
+}stu;
+
+bool cmp(stu s1, stu s2)
+{
+	if (s1.flag != s2.flag)
+		return s1.flag < s2.flag;
+	else if (s1.sum != s2.sum)
+		return s1.sum > s2.sum;
+	else if (s1.vi != s2.vi)
+		return s1.vi > s2.vi;
+	else
+		return strcmp(s1.id, s2.id) < 0;
+}
+int main()
+{
+	stu s[100001];
+	int non = 0;
+	cin >> N >> L >> H;
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%s%d%d", s[i].id, &s[i].vi, &s[i].ta);
+		s[i].sum = s[i].vi + s[i].ta;
+		if (s[i].ta < L || s[i].vi < L)
+		{
+			s[i].flag = 5;
+			++non;
+			continue;
+		}
+		else if (s[i].ta >= H&&s[i].vi >= H)
+		{
+			s[i].flag = 1;
+			continue;
+		}
+		else if (s[i].vi >= H&&s[i].ta < H)
+		{
+			s[i].flag = 2;
+			continue;
+		}
+		else if (s[i].vi >= s[i].ta)
+		{
+			s[i].flag = 3;
+			continue;
+		}
+		else
+		{
+			s[i].flag = 4;
+			continue;
+		}
+	}
+	sort(s, s + N, cmp);
+	cout << N - non << endl;
+	for (int i = 0; i < N - non; ++i)
+	{
+		printf("%s %d %d\n", s[i].id, s[i].vi, s[i].ta);
+	}
+}
