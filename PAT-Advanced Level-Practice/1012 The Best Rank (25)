@@ -3,6 +3,7 @@
 #include<cmath>
 #include<algorithm>
 using namespace std;
+
 int now;
 char c[4] = { 'A','C','M','E' };
 int r[1000000][4] = { 0 };
