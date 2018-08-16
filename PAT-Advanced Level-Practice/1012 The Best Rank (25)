@@ -1,0 +1,60 @@
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+int now;
+char c[4] = { 'A','C','M','E' };
+int r[1000000][4] = { 0 };
+struct stu
+{
+	int id;
+	int grade[4];
+}s[2001];
+bool cmp(stu a, stu b)
+{
+	return a.grade[now] > b.grade[now];
+}
+int main()
+{
+	int N, M;
+	int q;
+	scanf("%d%d", &N, &M);
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d%d%d%d", &s[i].id, &s[i].grade[1], &s[i].grade[2], &s[i].grade[3]);
+		s[i].grade[0] = round((s[i].grade[1] + s[i].grade[2] + s[i].grade[3]) / 3.0) + 0.5;
+	}
+	for (now = 0; now < 4; ++now)
+	{
+		sort(s, s + N, cmp);
+		r[s[0].id][now] = 1;
+		for (int i = 1; i < N; ++i)
+		{
+			if (s[i].grade[now] == s[i - 1].grade[now])
+			{
+				r[s[i].id][now] = r[s[i - 1].id][now];
+			}
+			else
+			{
+				r[s[i].id][now] = i + 1;
+			}
+		}
+	}
+	for (int i = 0; i < M; ++i)
+	{
+		scanf("%d", &q);
+		if (r[q][0] == 0)
+			printf("N/A\n");
+		else
+		{
+			int k = 0;
+			for (int j = 0; j < 4; ++j)
+			{
+				if (r[q][j] < r[q][k])
+					k = j;
+			}
+			printf("%d %c\n",r[q][k],c[k]);
+		}
+	}
+}
