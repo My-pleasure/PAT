@@ -1,0 +1,44 @@
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+typedef struct
+{
+	char id[7];
+	char name[9];
+	int grade;
+}stu;
+bool cmp1(stu a,stu b)
+{
+	return strcmp(a.id,b.id)<0;
+}
+bool cmp2(stu a,stu b)
+{
+	if(strcmp(a.name,b.name)!=0) return strcmp(a.name,b.name)<0;
+	else return strcmp(a.id,b.id)<0;
+}
+bool cmp3(stu a,stu b)
+{
+	if(a.grade!=b.grade) return a.grade<b.grade;
+	else return strcmp(a.id,b.id)<0;
+}
+int main()
+{
+	stu s[100005];
+	int N,C;
+	cin>>N>>C;
+	for(int i=0;i<N;++i)
+	{
+		scanf("%s%s%d",s[i].id,s[i].name,&s[i].grade);
+	}
+	switch(C)
+	{
+		case 1:sort(s,s+N,cmp1);break;
+		case 2:sort(s,s+N,cmp2);break;
+		case 3:sort(s,s+N,cmp3);break;
+	}
+	for(int i=0;i<N;++i)
+	{
+		printf("%s %s %d\n",s[i].id,s[i].name,s[i].grade);
+	}
+}
