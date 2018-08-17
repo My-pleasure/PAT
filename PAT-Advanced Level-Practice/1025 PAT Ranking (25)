@@ -1,0 +1,77 @@
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+#include<iostream>
+using namespace std;
+int local[101] = { 0 };
+int num;
+typedef struct
+{
+	char name[15];
+	int grade;
+	int rank;
+	int loc;
+	int r;
+}stu;
+bool cmp(stu a, stu b)
+{
+	return a.grade > b.grade;
+}
+bool cmp1(stu a, stu b)
+{
+	if (a.grade != b.grade) return a.grade > b.grade;
+	else return strcmp(a.name, b.name) < 0;
+}
+int main()
+{
+	stu s[30005];
+	int N;
+	int k = 0, sum = 0;
+	int ps = 0;
+	cin >> N;
+	for (int i = 1; i <= N; ++i)
+	{
+		cin >> local[i];
+		for (int j = 0; j < local[i]; ++j)
+		{
+			scanf("%s%d", s[k].name,&s[k].grade);
+			s[k].loc = i ;
+			++k;
+		}
+	}
+	for (int i = 0; i < N; ++i)
+	{
+		ps += local[i];
+		sort(s + ps, s + ps + local[i + 1], cmp1);
+		s[ps].r = 1;
+		num = 1;
+		for (int j = 1; j < local[i + 1]; ++j)
+		{
+			if (s[ps + j].grade == s[ps + j - 1].grade)
+			{
+				s[ps + j].r = s[ps + j - 1].r;
+				++num;
+			}
+			else
+				s[ps + j].r = ++num;
+		}
+	}
+	for (int i = 0; i < 101; ++i)
+	{
+		sum += local[i];
+	}
+	sort(s, s + sum, cmp1);
+	s[0].rank = 1;
+	for (int i = 1; i < sum; ++i)
+	{
+		if (s[i].grade == s[i - 1].grade)
+			s[i].rank = s[i - 1].rank;
+		else
+			s[i].rank = i + 1;
+	}
+	cout << sum << endl;
+	for (int i = 0; i < sum; ++i)
+	{
+		printf("%s %d %d %d\n", s[i].name, s[i].rank, s[i].loc, s[i].r);
+	}
+}
