@@ -1,0 +1,69 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm> 
+using namespace std;
+typedef struct
+{
+	char id[9];
+	int age;
+	int worth;
+}peo;
+typedef struct
+{
+	int num;
+	int Amin;
+	int Amax;
+}query;
+bool cmp(peo a,peo b)
+{
+	if(a.worth!=b.worth) return a.worth>b.worth;
+	else if(a.age!=b.age) return a.age<b.age;
+	else return strcmp(a.id,b.id)<0;
+}
+peo p[100005];
+peo x[100005];
+query q[1005];
+int main()
+{
+
+	int AGE[201]={0};
+	int xnum=0;
+	int N,K;
+	scanf("%d%d",&N,&K);
+	for(int i=0;i<N;++i)
+	{
+		scanf("%s%d%d",p[i].id,&p[i].age,&p[i].worth);
+	}
+	for(int i=0;i<K;++i)
+	{
+		scanf("%d%d%d",&q[i].num,&q[i].Amin,&q[i].Amax);
+	}
+	sort(p,p+N,cmp);
+	for(int i=0;i<N;++i)
+	{
+		if(AGE[p[i].age]<100)
+		{
+			x[xnum++]=p[i];
+			++AGE[p[i].age];
+		}
+	}
+	for(int i=0;i<K;++i)
+	{
+		printf("Case #%d:\n",i+1);
+		int printn=0;
+		for(int j=0;printn<q[i].num&&j<xnum;++j)
+		{
+			if(x[j].age>=q[i].Amin&&x[j].age<=q[i].Amax)
+			{
+			printf("%s %d %d\n",x[j].id,x[j].age,x[j].worth);
+			++printn;
+		    }
+		}
+		if(printn==0)
+		{
+			printf("None\n");
+		}
+	}
+	return 0;
+}
