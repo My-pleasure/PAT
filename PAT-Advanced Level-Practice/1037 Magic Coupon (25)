@@ -1,0 +1,61 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+bool cmp(int a,int b)
+{
+	return a>b;
+}
+bool cmp1(int a,int b)
+{
+	return a<b;
+}
+int main() 
+{
+	int c1[100001],c2[100001];
+	int p1[100001],p2[100001];
+	int nc,np;
+	int t;
+	int sum=0;
+	int kc=0,lc=0;
+	int kp=0,lp=0;
+	cin>>nc;
+	for(int i=0;i<nc;++i)
+	{
+		scanf("%d",&t);
+		if(t>0)
+		{
+			c1[kc++]=t;
+		}
+		if(t<0)
+		{
+			c2[lc++]=t;
+		}
+	}
+	cin>>np;
+	for(int i=0;i<np;++i)
+	{
+		scanf("%d",&t);
+		if(t>0)
+		{
+			p1[kp++]=t;
+		}
+		if(t<0)
+		{
+			p2[lp++]=t;
+		}
+	}
+	sort(c1,c1+kc,cmp);
+	sort(c2,c2+lc);
+	sort(p1,p1+kp,cmp);
+	sort(p2,p2+lp);
+	for(int i=0;i<kc,i<kp;++i)
+	{
+		sum+=c1[i]*p1[i];
+	}
+	for(int i=0;i<lc,i<lp;++i)
+	{
+		sum+=c2[i]*p2[i];
+	}
+	printf("%d",sum);
+	return 0; 
+}
