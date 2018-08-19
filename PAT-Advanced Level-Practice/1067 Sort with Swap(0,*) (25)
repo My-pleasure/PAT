@@ -1,0 +1,42 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+int N;
+int k=0,lef=0,j=1;
+int temp;
+int a[100001];
+int main() 
+{
+	scanf("%d",&N);
+	for(int i=0;i<N;++i)
+	{
+		scanf("%d",&a[i]);
+		if(a[i]!=i&&i!=0)
+		{
+			++lef;
+		}
+	}
+	while(lef>0)
+	{
+		if(a[0]==0)
+		{
+			while(j<N)
+			{
+				if(a[j]!=j)
+				{
+					swap(a[0],a[j]);
+					++k;
+					break;
+				}
+				++j;
+			}
+		}
+		while(a[0]!=0)
+		{
+			swap(a[0],a[a[0]]);
+			++k;
+			--lef;
+		}
+	}
+	printf("%d",k);
+}
