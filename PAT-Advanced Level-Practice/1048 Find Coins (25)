@@ -1,0 +1,28 @@
+#include<iostream>
+using namespace std;
+int main() 
+{
+  int Hash[1001]={0};
+	int N,M;
+	int a;
+	cin>>N>>M;
+	for(int i=0;i<N;++i)
+	{
+		scanf("%d",&a);
+		++Hash[a];
+	}
+	for(int i=1;i<M;++i)
+	{
+		if(Hash[i]&&Hash[M-i])
+		{
+			if(i==M-i&&Hash[i]<=1)
+			{
+				continue;
+			}
+			printf("%d %d",i,M-i);
+			return 0;
+		}
+	}
+	printf("No Solution\n");
+	return 0;
+}
