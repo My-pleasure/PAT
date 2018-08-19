@@ -1,0 +1,38 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	int flag[128]={0};
+	char s[81];
+	char check[81];
+	int len,len1;
+	scanf("%s",s);
+	len=strlen(s);
+	for(int i=0;i<len;++i)
+	{
+		if(s[i]>='a'&&s[i]<='z')
+		{
+			s[i]=s[i]-32;
+		}
+		flag[s[i]]=1;
+	}
+	scanf("%s",check);
+	len1=strlen(check);
+	for(int i=0;i<len1;++i)
+	{
+		if(check[i]>='a'&&check[i]<='z')
+		{
+			check[i]=check[i]-32;
+		}
+		flag[check[i]]=2;
+	}
+	for(int i=0;i<len;++i)
+	{
+		if(flag[s[i]]==1)
+		{
+			printf("%c",s[i]);
+			flag[s[i]]=3;
+		}
+	}
+}
