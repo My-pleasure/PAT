@@ -1,0 +1,39 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	int flag[128]={0};
+	char s1[1001];
+	char s2[1001];
+	int len1,len2,sum=0,que=0;
+	scanf("%s",s1);
+	scanf("%s",s2);
+	len1=strlen(s1);
+	len2=strlen(s2);
+	for(int i=0;i<len1;++i)
+	{
+		++flag[s1[i]];
+		++sum;
+	}
+	for(int i=0;i<len2;++i)
+	{
+		if(flag[s2[i]]>0)
+		{
+			--flag[s2[i]];
+			--sum;
+		}
+		else
+		{
+			++que;
+		}
+	}
+	if(que!=0)
+	{
+		printf("No %d",que);
+	}
+	else
+	{
+		printf("Yes %d",sum);
+	}
+}
