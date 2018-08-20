@@ -1,0 +1,14 @@
+#include<iostream>
+using namespace std;
+int main() 
+{
+	int n;
+	double ans,t;
+	cin>>n;
+	for(int i=1;i<=n;++i)
+	{
+		scanf("%lf",&t);
+		ans+=t*i*(n+1-i);
+	}
+	printf("%.2lf",ans);
+}
