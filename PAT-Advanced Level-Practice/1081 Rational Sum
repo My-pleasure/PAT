@@ -1,0 +1,64 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+struct Fraction
+{
+	long long up=0;
+	long long down=1;
+}r[101],sum;
+int gcb(long long a,long long b)
+{
+	if(b==0) return a;
+	else  return gcb(b,a%b);
+}
+Fraction reduction(Fraction r)
+{
+	if(r.down<0)
+	{
+		r.up=-r.up;
+		r.down=-r.down;
+	}
+	if(r.up==0)
+	{
+		r.down=1;
+	}
+	else
+	{
+		int d=gcb(abs(r.up),abs(r.down));
+		r.up/=d;
+		r.down/=d;
+	}
+	return r;
+}
+Fraction addition(Fraction a,Fraction b)
+{
+	Fraction result;
+	result.up=a.up*b.down+b.up*a.down;
+	result.down=a.down*b.down;
+	return reduction(result);
+}
+Fraction disp(Fraction r)
+{
+	reduction(r);
+	if(r.down==1)
+	{
+		printf("%lld",r.up);
+	}
+	else if(abs(r.up)>r.down)
+	{
+		printf("%lld %lld/%lld",r.up/r.down,abs(r.up)%r.down,r.down);
+	}
+	else printf("%lld/%lld",r.up,r.down);
+}
+int main() 
+{
+	int N;
+	cin>>N;
+	for(int i=0;i<N;++i)
+	{
+		scanf("%lld/%lld",&r[i].up,&r[i].down);
+		sum=addition(sum,r[i]);
+	}
+	disp(sum);
+}
