@@ -1,0 +1,25 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+int N,p;
+int a[100001];
+int main() 
+{
+	cin>>N>>p;
+	for(int i=0;i<N;++i)
+	{
+		scanf("%d",&a[i]);
+	}
+	sort(a,a+N);
+	int i=0,j=0,ck=1;
+	while(i<N&&j<N)
+	{
+		while(j<N&&a[j]<=(long long)a[i]*p)
+		{
+			ck=max(ck,j-i+1);
+			++j;
+		}
+		++i;
+	}
+	printf("%d",ck);
+}
