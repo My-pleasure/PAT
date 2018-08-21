@@ -1,0 +1,91 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+struct bign
+{
+	int d[100];
+	int len;
+	bign(){
+		memset(d,0,sizeof(d));
+		len=0;
+	}
+};
+bign change(char s[])
+{
+	bign c;
+	c.len=strlen(s);
+	for(int i=0;i<c.len;++i)
+	{
+		c.d[i]=s[c.len-1-i]-'0';
+	}
+	return c;
+}
+bool check(bign c)
+{
+	int i=0,j=c.len-1;
+	while(i<j)
+	{
+		if(c.d[i]!=c.d[j])
+		{
+			return false;
+		}
+		++i;--j;
+	}
+	return true;
+}
+bign rever(bign c)
+{
+	int i=0,j=c.len-1;
+	int t;
+	while(i<j)
+	{
+		t=c.d[i];
+		c.d[i]=c.d[j];
+		c.d[j]=t;
+		++i;--j;
+	}
+	return c;
+}
+bign add(bign a,bign b)
+{
+	bign c;
+	int carry=0;
+	for(int i=0;i<a.len||i<b.len;++i)
+	{
+		int t=a.d[i]+b.d[i]+carry;
+		c.d[c.len++]=t%10;
+		carry=t/10;
+	}
+	if(carry!=0)
+	{
+		c.d[c.len++]=carry;
+	}
+	return c;
+}
+void disp(bign c)
+{
+	for(int i=c.len-1;i>=0;--i)
+	{
+		printf("%d",c.d[i]);
+	}
+}
+int main()
+{
+	char s[11];
+	int k;
+	bign c,t;
+	scanf("%s%d",&s,&k);
+	int step=0;
+	c=change(s);
+	while(!check(c)&&step<k)
+	{
+		t=rever(c);
+		c=add(c,t);
+		++step;
+	}
+	disp(c);
+	printf("\n");
+	if(step>k) printf("%d",k);
+	else printf("%d",step);
+}
