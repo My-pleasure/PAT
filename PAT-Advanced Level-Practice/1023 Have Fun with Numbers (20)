@@ -1,0 +1,89 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int hash[10]={0};
+struct bign
+{
+	int d[21];
+	int len;
+	bign()
+	{
+		memset(d,0,sizeof(d));
+		len=0;
+	}
+};
+bign change(char s[])
+{
+	bign c;
+	c.len=strlen(s);
+	for(int i=0;i<c.len;++i)
+	{
+		c.d[i]=s[c.len-1-i]-'0';
+	}
+	return c;
+}
+void Hash(bign c)
+{
+	for(int i=0;i<c.len;++i)
+	{
+		++hash[c.d[i]];
+	}
+}
+bign multi(bign a,int b)
+{
+	bign c;
+	int carry=0;
+	for(int i=0;i<a.len;++i)
+	{
+		int t=a.d[i]*b+carry;
+		c.d[c.len++]=t%10;
+		carry=t/10;
+	}
+	if(carry!=0)
+	{
+		c.d[c.len++]=carry;
+	}
+	return c;
+}
+void disp(bign c)
+{
+	for(int i=c.len-1;i>=0;--i)
+	{
+		printf("%d",c.d[i]);
+	}
+}
+int main()
+{
+	char s[21];
+	bign c,t;
+	scanf("%s",s);
+	c=change(s);
+	Hash(c);
+	t=multi(c,2);
+	if(c.len!=t.len)
+	{
+		printf("No\n");
+		disp(t);
+	}
+	else
+	{
+		for(int i=0;i<t.len;++i)
+		{
+			if(hash[t.d[i]]==0)
+			{
+				printf("No\n");
+				disp(t);
+				return 0;
+			}
+			else
+			{
+				--hash[t.d[i]];
+			}
+		}
+		printf("Yes\n");
+		disp(t);
+		return 0;
+	}
+	
+}
