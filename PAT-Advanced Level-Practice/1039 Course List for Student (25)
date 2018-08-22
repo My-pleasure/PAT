@@ -1,0 +1,48 @@
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<algorithm>
+using namespace std;
+const int N=40010;
+const int M=26*26*26*10+1;
+vector<int> stu[M];
+int getid(char s[])
+{
+	int len=strlen(s);
+	int id=0;
+	for(int i=0;i<len-1;++i)
+	{
+		id=id*26+s[i]-'A';
+	}
+	id=id*10+s[len-1]-'0';
+	return id;
+} 
+int main()
+{
+	int n,k;
+	char name[5];
+	cin>>n>>k;
+	for(int i=0;i<k;++i)
+	{
+		int course,t;
+		scanf("%d%d",&course,&t);
+		for(int j=0;j<t;++j)
+		{
+			scanf("%s",name);
+			int id=getid(name);
+			stu[id].push_back(course);
+		}
+	}
+	for(int i=0;i<n;++i)
+	{
+		scanf("%s",name);
+		int id=getid(name);
+		sort(stu[id].begin(),stu[id].end());
+		printf("%s %d",name,stu[id].size());
+		for(int j=0;j<stu[id].size();++j)
+		{
+			printf(" %d",stu[id][j]); 
+		}
+		printf("\n");
+	}
+}
