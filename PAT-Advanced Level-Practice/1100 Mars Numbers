@@ -1,0 +1,51 @@
+#include<iostream>
+#include<map>
+#include<string>
+using namespace std;
+string di[13]={"tret","jan","feb","mar","apr","may","jun","jly","aug","sep","oct","nov","dec"};
+string gao[13]={"tret","tam","hel","maa","huh","tou","kes","hei","elo","syy","lok","mer","jou"};
+string numtostr[170];
+map<string,int> strtonum;
+void init()
+{
+	for(int i=0;i<13;++i)
+	{
+		numtostr[i]=di[i];
+		strtonum[di[i]]=i;
+		numtostr[i*13]=gao[i];
+		strtonum[gao[i]]=i*13;
+	}
+	for(int i=1;i<13;++i)
+	{
+		for(int j=1;j<13;++j)
+		{
+			string str=gao[i]+" "+di[j];
+			numtostr[i*13+j]=str;
+			strtonum[str]=i*13+j;
+		}
+	}
+}
+int main()
+{
+	int N;
+	init();
+	scanf("%d%*c",&N);
+	for(int i=0;i<N;++i)
+	{
+		string str;
+		getline(cin,str);
+		if(str[0]>='0'&&str[0]<='9')
+		{
+			int num=0;
+			for(int i=0;i<str.length();++i)
+			{
+				num=num*10+str[i]-'0';
+			}
+			cout<<numtostr[num]<<endl;
+		}
+		else
+		{
+			printf("%d\n",strtonum[str]);
+		}
+	}
+}
