@@ -1,0 +1,57 @@
+#include<iostream>
+#include<queue>
+#include<string>
+using namespace std;
+const int maxn=10010;
+queue<int> q;
+struct mouse
+{
+	int weigt;
+	int r;
+}m[maxn];
+int main()
+{
+	int np,ng,temp;
+	cin>>np>>ng;
+	for(int i=0;i<np;++i)
+	{
+		scanf("%d",&m[i].weigt);
+	}
+	int order;
+	for(int i=0;i<np;++i)
+	{
+		scanf("%d",&order);
+		q.push(order);
+	}
+	temp=np;
+	int group;
+	while(q.size()!=1)
+	{
+		int k=0;
+		if(temp%ng==0) group=temp/ng;
+		else group=temp/ng+1;
+		for(int i=0;i<group;++i)
+		{
+			k=q.front();
+			for(int j=0;j<ng;++j)
+			{
+				if(i*ng+j>=temp) break;
+				int front=q.front();
+				if(m[front].weigt>m[k].weigt)
+				{
+					k=front;
+				}
+				m[front].r=group+1;
+				q.pop();
+			}
+			q.push(k);
+		}
+		temp=group;
+	}
+	m[q.front()].r=1;
+	for(int i=0;i<np;++i)
+	{
+		if(i==np-1) printf("%d",m[i].r);
+		else printf("%d ",m[i].r);
+	}
+}
