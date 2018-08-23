@@ -1,0 +1,55 @@
+#include<iostream>
+#include<map>
+#include<set> 
+#include<string>
+using namespace std;
+map<string,set<int> > mT,mA,mK,mP,mY;
+void query(map<string,set<int> > &m,string &s)
+{
+	if(m.find(s)==m.end()) printf("Not Found\n");
+	else
+	{
+		for(set<int>::iterator it=m[s].begin();it!=m[s].end();++it)
+		{
+			printf("%07d\n",*it);
+		}
+	}
+}
+int main()
+{
+	int n,id,M,type;
+	string title,author,key,publisher,ye;
+	scanf("%d",&n);
+	for(int i=0;i<n;++i)
+	{
+		scanf("%d",&id);
+		char c=getchar();
+		getline(cin,title);
+		mT[title].insert(id);
+		getline(cin,author);
+		mA[author].insert(id);
+		while(cin>>key)
+		{
+			mK[key].insert(id);
+			c=getchar();
+			if(c=='\n') break;
+		}
+		getline(cin,publisher);
+		mP[publisher].insert(id);
+		getline(cin,ye);
+		mY[ye].insert(id);
+	}
+	string str;
+	scanf("%d",&M);
+	for(int i=0;i<M;++i)
+	{
+		scanf("%d: ",&type);
+		getline(cin,str);
+		cout<<type<<": "<<str<<endl;
+		if(type==1) query(mT,str);
+		else if(type==2) query(mA,str);
+		else if(type==3) query(mK,str);
+		else if(type==4) query(mP,str);
+		else query(mY,str);
+	}
+}
