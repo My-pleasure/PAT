@@ -1,0 +1,51 @@
+#include<iostream>
+#include<algorithm>
+#include<cstdio>
+#include<cstring>
+using namespace std;
+const int maxn=100010;
+struct node
+{
+	int address;
+	int next;
+	int key;
+	bool flag;
+}n[maxn];
+bool cmp(node a,node b)
+{
+	if(a.flag==false||b.flag==false) return a.flag>b.flag;
+	else return a.key<b.key; 
+} 
+int main()
+{
+	for(int i=0;i<maxn;++i)
+	{
+		n[i].flag=false;
+	} 
+	int N,first,temp;
+	scanf("%d%d",&N,&first);
+	for(int i=0;i<N;++i)
+	{
+		scanf("%d",&temp);
+		scanf("%d%d",&n[temp].key,&n[temp].next);
+		n[temp].address=temp;
+	}
+	int p=first,count=0;
+	while(p!=-1)
+	{
+		n[p].flag=true;
+		p=n[p].next;
+		++count;
+	}
+	if(count==0) printf("0 -1");
+	else
+	{
+		sort(n,n+100000,cmp);
+		printf("%d %05d\n",count,n[0].address); 
+		for(int i=0;i<count;++i)
+		{
+			if(i!=count-1) printf("%05d %d %05d\n",n[i].address,n[i].key,n[i+1].address);
+			else printf("%05d %d -1",n[i].address,n[i].key);
+		} 
+	} 
+}
