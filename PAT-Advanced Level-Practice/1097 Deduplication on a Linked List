@@ -1,0 +1,53 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+const int maxn=100010;
+int hashtable[maxn]={0};
+struct node
+{
+	int address,key,next,order=2*maxn;
+}n[maxn];
+bool cmp(node a,node b)
+{
+	return a.order<b.order;
+} 
+int main()
+{
+	int first,N,temp,second;
+	scanf("%d%d",&first,&N);
+	for(int i=0;i<N;++i)
+	{
+		scanf("%d",&temp);
+		scanf("%d%d",&n[temp].key,&n[temp].next);
+		n[temp].address=temp;
+	}
+	int order=0,count=0;
+	int valiu=0;
+	for(int i=first;i!=-1;i=n[i].next)
+	{
+		if(hashtable[abs(n[i].key)]==0)
+		{
+			n[i].order=order++;
+			hashtable[abs(n[i].key)]=1;
+			valiu++;
+		}
+		else
+		{
+			n[i].order=maxn+count;
+		}
+		++count;
+	}
+	sort(n,n+maxn,cmp);
+	for(int j=0;j<count;++j)
+	{
+		if(j!=valiu-1&&j!=count-1)
+		{
+			printf("%05d %d %05d\n",n[j].address,n[j].key,n[j+1].address);
+	    }
+	    else
+	    {
+	    	printf("%05d %d -1\n",n[j].address,n[j].key);
+		}
+	}
+}
