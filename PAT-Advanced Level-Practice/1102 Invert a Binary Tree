@@ -1,0 +1,78 @@
+#include<iostream>
+#include<algorithm>
+#include<queue>
+using namespace std;
+struct Node
+{
+	int data;
+	int lchild;
+	int rchild;
+}node[11];
+int N,num;
+bool Root[11];
+void invert(int root)
+{
+	if(root==-1) return;
+	else
+	{
+		invert(node[root].lchild);
+		invert(node[root].rchild);
+		swap(node[root].lchild,node[root].rchild);
+	}
+}
+void levelOrder(int root)
+{
+	queue<int> q;
+	q.push(root);
+	while(!q.empty())
+	{
+		int now=q.front();
+		q.pop();
+		printf("%d",now);
+		++num;
+		if(num<N) printf(" ");
+		if(node[now].lchild!=-1) q.push(node[now].lchild);
+		if(node[now].rchild!=-1) q.push(node[now].rchild);
+	}
+	printf("\n");
+}
+void inorder(int root)
+{
+	if(root==-1) return;
+	else
+	{
+		inorder(node[root].lchild);
+		printf("%d",root);
+		++num;
+		if(num<N) printf(" ");
+		inorder(node[root].rchild);
+	}
+}
+int main()
+{
+	scanf("%d",&N);
+	char tl,tr;
+	getchar();
+	for(int i=0;i<N;++i)
+	{
+		scanf("%c %c",&tl,&tr);
+		getchar();
+		if(tl=='-') node[i].lchild=-1;
+		else node[i].lchild=tl-'0';
+		if(tr=='-') node[i].rchild=-1;
+		else node[i].rchild=tr-'0';
+		Root[tl-'0']=true;
+		Root[tr-'0']=true;
+	}
+	int k;
+	for(k=0;k<N;++k)
+	{
+		if(Root[k]==false) break;
+	}
+	invert(k);
+	num=0;
+	levelOrder(k);
+	num=0;
+	inorder(k);
+	return 0;
+}
