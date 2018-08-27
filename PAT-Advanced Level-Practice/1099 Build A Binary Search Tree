@@ -1,0 +1,50 @@
+#include<cstdio>
+#include<algorithm>
+#include<queue>
+using namespace std;
+int number[101],num=0,cnt=0;
+int n,l,r;
+struct Node
+{
+	int data,lchild,rchild;
+}node[101];
+void insert(int root)
+{
+	if(root==-1) return;
+	insert(node[root].lchild);
+	node[root].data=number[num++];
+	insert(node[root].rchild);
+}
+void layOrder(int root)
+{
+	queue<int> q;
+	q.push(root);
+	while(!q.empty())
+	{
+		int now=q.front();
+		q.pop();
+		printf("%d",node[now].data);
+		++cnt;
+		if(cnt<n) printf(" ");
+		if(node[now].lchild!=-1) q.push(node[now].lchild);
+		if(node[now].rchild!=-1) q.push(node[now].rchild);
+	}
+}
+int main()
+{
+	scanf("%d",&n);
+	for(int i=0;i<n;++i)
+	{
+		scanf("%d%d",&l,&r);
+		node[i].lchild=l;
+		node[i].rchild=r;
+	}
+	for(int i=0;i<n;++i)
+	{
+		scanf("%d",&number[i]);
+	}
+	sort(number,number+n);
+	insert(0);
+	layOrder(0);
+	return 0;
+}
