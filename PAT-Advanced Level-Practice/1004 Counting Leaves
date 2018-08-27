@@ -39,3 +39,27 @@ int main()
 		else printf(" %d",leaf[i]);
 	}
 }
+
+//BFS
+int h[101];//存放结点的层号
+void BFS(int root)
+{
+	queue<int> q;
+	q.push(root);
+	h[root]=1;
+	while(!q.empty())
+	{
+		int now=q.front();
+		q.pop();
+		maxdep=max(maxdep,h[now]);
+		if(child[now].size()==0)
+		{
+			++leaf[h[now]];
+		}
+		for(int i=0;i<child[now].size();++i)
+		{
+			q.push(child[now][i]);
+			h[child[now][i]]=h[now]+1;
+		}
+	}
+}
