@@ -1,0 +1,63 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+struct Node
+{
+	int weight;
+	vector<int> child;
+}node[101];
+int N,M,S,num=0,sum=0;
+vector<int> vi[101],temp;
+bool cmp(int a,int b)
+{
+	return node[a].weight>node[b].weight;
+}
+void DFS(int root,int wei)
+{
+	temp.push_back(wei);
+	if(node[root].child.size()==0)
+	{
+		for(int j=0;j<temp.size();++j)
+		{
+			sum+=temp[j];
+		}
+		if(sum==S) vi[num++]=temp;
+		sum=0;
+		return;
+	}
+	for(int i=0;i<node[root].child.size();++i)
+	{
+		DFS(node[root].child[i],node[node[root].child[i]].weight);
+		temp.pop_back();
+	}
+}
+int main()
+{
+	int addr,k,t;
+	scanf("%d%d%d",&N,&M,&S);
+	for(int i=0;i<N;++i)
+	{
+		scanf("%d",&node[i].weight);
+	}
+	for(int i=0;i<M;++i)
+	{
+		scanf("%d%d",&addr,&k);
+		for(int j=0;j<k;++j)
+		{
+			scanf("%d",&t);
+			node[addr].child.push_back(t);
+		}
+		sort(node[addr].child.begin(),node[addr].child.end(),cmp);
+	}
+	DFS(0,node[0].weight);
+	for(int i=0;i<num;++i)
+	{
+		for(int j=0;j<vi[i].size();++j)
+		{
+			if(j==0) printf("%d",vi[i][j]);
+			else printf(" %d",vi[i][j]);
+		}
+		printf("\n");
+	}
+}
