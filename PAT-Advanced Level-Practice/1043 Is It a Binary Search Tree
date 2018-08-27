@@ -1,0 +1,89 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int N;
+vector<int> origin, pre, prem, post, postm;
+struct Node
+{
+	int data;
+	Node* lchild;
+	Node* rchild;
+};
+void insert(Node* &root, int a)
+{
+	if (root == NULL)
+	{
+		root = new Node;
+		root->data = a;
+		root->lchild = root->rchild = NULL;
+		return;
+	}
+	if (a<root->data) insert(root->lchild, a);
+	else insert(root->rchild, a);
+}
+void preOrder(Node* root)
+{
+	if (root == NULL) return;
+	pre.push_back(root->data);
+	if (root->lchild != NULL) preOrder(root->lchild);
+	if (root->rchild != NULL) preOrder(root->rchild);
+}
+void premOrder(Node* root)
+{
+	if (root == NULL) return;
+	prem.push_back(root->data);
+	if (root->rchild != NULL) premOrder(root->rchild);
+	if (root->lchild != NULL) premOrder(root->lchild);
+}
+void postOrder(Node* root)
+{
+	if (root == NULL) return;
+	if (root->lchild != NULL) postOrder(root->lchild);
+	if (root->rchild != NULL) postOrder(root->rchild);
+	post.push_back(root->data);
+}
+void postmOrder(Node* root)
+{
+	if (root == NULL) return;
+	if (root->rchild != NULL) postmOrder(root->rchild);
+	if (root->lchild != NULL) postmOrder(root->lchild);
+	postm.push_back(root->data);
+}
+int main()
+{
+	int t;
+	Node* root = NULL;
+	scanf("%d", &N);
+	for (int i = 0; i<N; ++i)
+	{
+		scanf("%d", &t);
+		origin.push_back(t);
+		insert(root, t);
+	}
+	preOrder(root);
+	premOrder(root);
+	if (origin == pre)
+	{
+		postOrder(root);
+		printf("YES\n");
+		for (int i = 0; i<post.size(); ++i)
+		{
+			if (i == 0) printf("%d", post[i]);
+			else printf(" %d", post[i]);
+		}
+	}
+	else if (origin == prem)
+	{
+		postmOrder(root);
+		printf("YES\n");
+		for (int i = 0; i<postm.size(); ++i)
+		{
+			if (i == 0) printf("%d", postm[i]);
+			else printf(" %d", postm[i]);
+		}
+	}
+	else
+	{
+		printf("NO");
+	}
+}
