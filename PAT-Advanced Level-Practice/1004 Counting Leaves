@@ -1,0 +1,41 @@
+#include<iostream>
+#include<vector>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+int N,M,dep,maxdep=0;
+vector<int> child[101];
+int leaf[101];
+void DFS(int root,int dep)
+{
+	maxdep=max(maxdep,dep);
+	if(child[root].size()==0)
+	{
+		++leaf[dep];
+		return;
+	}
+	for(int i=0;i<child[root].size();++i)
+	{
+		DFS(child[root][i],dep+1);
+	}
+}
+int main()
+{
+	int addr,k,t;
+	scanf("%d%d",&N,&M);
+	for(int i=0;i<M;++i)
+	{
+		scanf("%d%d",&addr,&k);
+		for(int j=0;j<k;++j)
+		{
+			scanf("%d",&t);
+			child[addr].push_back(t);
+		}
+	}
+	DFS(1,1);
+	for(int i=1;i<=maxdep;++i)
+	{
+		if(i==1) printf("%d",leaf[i]);
+		else printf(" %d",leaf[i]);
+	}
+}
