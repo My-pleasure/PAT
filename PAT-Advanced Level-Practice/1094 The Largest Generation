@@ -1,0 +1,54 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+using namespace std;
+int N,M;
+int hashtable[101];
+struct Node
+{
+	int lay;
+	vector<int> child; 
+}node[101];
+void BFS(int root)
+{
+	queue<int> q;
+	q.push(root);
+	node[root].lay=1;
+	++hashtable[1];
+	while(!q.empty())
+	{
+		int now=q.front();
+		q.pop();
+		for(int i=0;i<node[now].child.size();++i)
+		{
+			q.push(node[now].child[i]);
+			node[node[now].child[i]].lay=node[now].lay+1;
+			++hashtable[node[now].lay+1];
+		}
+	}
+}
+int main()
+{
+	int temp,k,t;
+	int maxgen=0,maxlevel=0;
+	scanf("%d%d",&N,&M);
+	for(int i=0;i<M;++i)
+	{
+		scanf("%d%d",&temp,&k);
+		for(int j=0;j<k;++j)
+		{
+			scanf("%d",&t);
+			node[temp].child.push_back(t);
+		}
+	}
+	BFS(1);
+	for(int i=0;i<101;++i)
+	{
+		if(maxgen<hashtable[i])
+		{
+			maxgen=hashtable[i];
+			maxlevel=i;
+		}
+	}
+	printf("%d %d",maxgen,maxlevel);
+}
