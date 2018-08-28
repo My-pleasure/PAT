@@ -1,0 +1,66 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+const int maxn=101;
+int Father[maxn];
+void initf(int Father[],int n)
+{
+	for(int i=1;i<=n;++i)
+	{
+		Father[i]=i;
+	}
+}
+int FindFather(int x)
+{
+	while(x!=Father[x])
+	{
+		x=Father[x];
+	}
+	return x;
+}
+/*递归方式找根结点 
+int FindFather(int x)
+{
+	if(x==Father[x]) return x;
+	else return FindFather(Father[x]);
+}
+*/
+void Union(int a,int b)
+{
+	int faA=FindFather(a);
+	int faB=FindFather(b);
+	if(faA!=faB) faA=Father[faB];
+}
+//路径压缩
+/*
+//非递归
+int FindFather(int x)
+{
+	int a=x;
+	while(x!=Father[x])
+	{
+		x=Father[x];
+	}
+	while(a!=Father[a])
+	{
+		int z=a;
+		a=Father[a];
+		Father[z]=x;
+	}
+	return x;
+}
+//递归
+int FindFather(int x)
+{
+	if(x==Father[x]) return x;
+	else
+	{
+		int F=FindFather[x];
+		Father[x]=F;
+		return F;
+	}
+}*/
+int main()
+{
+	
+}
