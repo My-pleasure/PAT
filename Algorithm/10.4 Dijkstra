@@ -1,0 +1,94 @@
+#include<iostream>
+#include<vector> 
+using namespace std;
+struct node
+{
+	int v,dis;
+};
+//邻接矩阵 
+const int maxn=1001;
+const int INF=1000000000;
+int G[maxn][maxn],n;
+bool vis[maxn]={false};
+int d[maxn];
+vector<node> Adj[maxn];
+void dijkstra(int s)
+{
+	fill(d,d+maxn,INF);
+	d[s]=0;
+	for(int i=0;i<n;++i)
+	{
+		int u=-1,MIN=INF;
+		for(int j=0;j<n;++j)
+		{
+			if(vis[j]==false&&d[j]<MIN)
+			{
+				u=j;
+				MIN=d[j];
+			}
+		}
+		if(u==-1) return;
+		vis[u]=true;
+		for(int v=0;v<n;++v)
+		{
+			if(vis[v]==false&&d[v]>d[u]+G[u][v]&&G[u][v]!=INF)
+			{
+				d[v]=d[u]+G[u][v];
+			}
+		}
+	}
+}
+//邻接表 
+void Dijkstra(int s)
+{
+	fill(d,d+maxn,INF);
+	d[s]=0;
+	for(int i=0;i<n;++i)
+	{
+		int u=-1,MIN=INF;
+		for(int j=0;j<n;++j)
+		{
+			if(vis[j]==false&&d[j]<MIN)
+			{
+				u=j;
+				MIN=d[j];
+			}
+		}
+		if(u==-1) return;
+		vis[u]=true;
+		for(int j=0;j<Adj[u].size();++j)
+		{
+			int v=Adj[u][j].v;
+			if(vis[v]==false&&d[v]>d[u]+Adj[u][j].dis)
+			{
+				d[v]=d[u]+Adj[u][j].dis;
+			}
+		}
+	}
+}
+int main()
+{
+	int u,v,w;
+	int m,s;
+	scanf("%d%d%d",&n,&m,&s);
+	for(int i=0;i<m;++i)
+	{
+		scanf("%d%d%d",&u,&v,&w);
+		node st;
+		st.v=v;
+		st.dis=w;
+		Adj[u].push_back(st);
+	}
+	Dijkstra(s);
+/*	fill(G[0],G[0]+maxn*maxn,INF);
+	for(int i=0;i<m;++i)
+	{
+		scanf("%d%d%d",&u,&v,&w);
+		G[u][v]=w;
+	}
+	dijkstra(s);*/ 
+	for(int i=0;i<n;++i)
+	{
+		printf("%d ",d[i]);
+	}
+}
