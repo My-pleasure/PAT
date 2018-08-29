@@ -1,0 +1,118 @@
+#include<iostream>
+#include<vector> 
+#include<cmath>
+using namespace std;
+const int maxn=501;
+const int INF=1000000000;
+int Cmax,n,ed,m,minneed=INF,minremain=INF;
+bool vis[maxn];
+int cnt[maxn],G[maxn][maxn],d[maxn];
+vector<int> pre[maxn],tempPath,path;
+void dijkstra(int s)
+{
+	fill(d,d+maxn,INF);
+	d[s]=0;
+	for(int i=0;i<=n;++i)
+	{
+		int u=-1,MIN=INF;
+		for(int j=0;j<=n;++j)
+		{
+			if(vis[j]==false&&d[j]<MIN)
+			{
+				u=j;
+				MIN=d[j];
+			}
+		}
+		if(u==-1) return;
+		vis[u]=true;
+		for(int v=0;v<=n;++v)
+		{
+			if(vis[v]==false&&G[u][v]!=INF)
+			{
+				if(d[v]>d[u]+G[u][v])
+				{
+					d[v]=d[u]+G[u][v];
+					pre[v].clear();
+					pre[v].push_back(u);
+				}
+				else if(d[v]==d[u]+G[u][v])
+				{
+					pre[v].push_back(u);
+				}
+			}
+		}
+	}
+}
+void DFS(int v)
+{
+	if(v==0)
+	{
+		tempPath.push_back(0);
+		int need=0,remain=0;
+		for(int i=tempPath.size()-1;i>=0;--i)
+		{
+			int id=tempPath[i];
+			if(cnt[id]>0)
+			{
+				remain+=cnt[id];
+			}
+			else
+			{
+				if(remain>abs(cnt[id]))
+				{
+					remain-=abs(cnt[id]);
+				}
+				else
+				{
+					need+=abs(cnt[id])-remain;
+					remain=0;
+				}
+			}
+		}
+		if(need<minneed)
+		{
+			path=tempPath;
+			minneed=need;
+			minremain=remain;
+		}
+		else if(need==minneed&&remain<minremain)
+		{
+			minremain=remain;
+			path=tempPath;
+		}
+		tempPath.pop_back();
+	}
+	tempPath.push_back(v);
+	vis[v]=true;
+	for(int i=0;i<pre[v].size();++i)
+	{
+		DFS(pre[v][i]);
+	}
+	tempPath.pop_back();
+}
+int main()
+{
+	int u,v;
+	fill(G[0],G[0]+maxn*maxn,INF);
+	scanf("%d%d%d%d",&Cmax,&n,&ed,&m);
+	for(int i=1;i<=n;++i)
+	{
+		scanf("%d",&cnt[i]);
+		cnt[i]-=Cmax/2;
+	}
+	for(int i=0;i<m;++i)
+	{
+		scanf("%d%d",&u,&v);
+		scanf("%d",&G[u][v]);
+		G[v][u]=G[u][v];
+	}
+	dijkstra(0);
+	DFS(ed);
+	printf("%d ",minneed);
+	for(int i=path.size()-1;i>=0;--i)
+	{
+		if(i!=0) printf("%d->",path[i]);
+		else printf("%d",path[i]);
+	}
+	printf(" %d",minremain);
+}
