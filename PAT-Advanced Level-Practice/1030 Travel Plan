@@ -1,0 +1,91 @@
+#include<iostream>
+#include<vector> 
+using namespace std;
+const int maxn=501;
+const int INF=1000000000;
+int n,m,S,D,minCost=INF;
+int d[maxn],G[maxn][maxn],cost[maxn][maxn];
+bool vis[maxn]={false};
+vector<int> pre[maxn],tempPath,path;
+void dijkstra(int s)
+{
+	fill(d,d+maxn,INF);
+	d[s]=0;
+	for(int i=0;i<n;++i)
+	{
+		int u=-1,MIN=INF;
+		for(int j=0;j<n;++j)
+		{
+			if(vis[j]==false&&d[j]<MIN)
+			{
+				u=j;
+				MIN=d[j];
+			}
+		}
+		if(u==-1) return;
+		vis[u]=true;
+		for(int v=0;v<n;++v)
+		{
+			if(vis[v]==false&&G[u][v]!=INF)
+			{
+				if(d[v]>d[u]+G[u][v])
+				{
+					d[v]=d[u]+G[u][v];
+					pre[v].clear();
+					pre[v].push_back(u);
+				}
+				else if(d[v]==d[u]+G[u][v])
+				{
+					pre[v].push_back(u);
+				}
+			}
+		}
+	}
+}
+void DFS(int s)
+{
+	if(s==S)
+	{
+		tempPath.push_back(s);
+		int value=0;
+		for(int i=tempPath.size()-1;i>0;--i)
+		{
+			int id=tempPath[i],idnext=tempPath[i-1];
+			value+=cost[id][idnext];
+		}
+		if(minCost>value)
+		{
+			minCost=value;
+			path=tempPath;
+		}
+		tempPath.pop_back();
+		return;
+	}
+	tempPath.push_back(s);
+	for(int i=0;i<pre[s].size();++i)
+	{
+		DFS(pre[s][i]);
+	}
+	tempPath.pop_back();
+}
+int main()
+{
+	int u,v;
+	scanf("%d%d%d%d",&n,&m,&S,&D);
+	fill(G[0],G[0]+maxn*maxn,INF);
+	fill(cost[0],cost[0]+maxn*maxn,INF);
+	for(int i=0;i<m;++i)
+	{
+		scanf("%d%d",&u,&v);
+		scanf("%d%d",&G[u][v],&cost[u][v]);
+		G[v][u]=G[u][v];
+		cost[v][u]=cost[u][v];
+	}
+	dijkstra(S);
+	DFS(D);
+	for(int i=path.size()-1;i>=0;--i)
+	{
+		printf("%d ",path[i]);
+	}
+	printf("%d %d",d[D],minCost);
+}
