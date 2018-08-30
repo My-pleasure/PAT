@@ -1,0 +1,132 @@
+#include<cstdio>
+#include<iostream>
+#include<map>
+#include<vector>
+#include<string>
+using namespace std;
+const int maxn=201;
+const int INF=1000000000;
+int n,k,ed,weight[maxn],G[maxn][maxn],citynum=1,d[maxn],num[maxn];
+string S;
+int maxhappy=0,maxav=0;
+bool vis[maxn]={false};
+map<string,int> strToInt;
+map<int,string> intToStr;
+vector<int> pre[maxn],path,tempPath;
+int change(string str)
+{
+	if(strToInt.find(str)!=strToInt.end())
+	{
+		return strToInt[str];
+	}
+	else
+	{
+		strToInt[str]=citynum;
+		intToStr[citynum]=str;
+		return citynum++;
+	}
+}
+void dijkstra(int s)
+{
+	fill(d,d+maxn,INF);
+	fill(num,num+maxn,0);
+	num[s]=1;
+	d[s]=0;
+	for(int i=0;i<n;++i)
+	{
+		int u=-1,MIN=INF;
+		for(int j=0;j<n;++j)
+		{
+			if(vis[j]==false&&d[j]<MIN)
+			{
+				u=j;
+				MIN=d[j];
+			}
+		}
+		if(u==-1) return;
+		vis[u]=true;
+		for(int v=0;v<n;++v)
+		{
+			if(vis[v]==false&&G[u][v]!=INF)
+			{
+				if(d[v]>d[u]+G[u][v])
+				{
+					d[v]=d[u]+G[u][v];
+					pre[v].clear();
+					pre[v].push_back(u);
+					num[v]=num[u];
+				}
+				else if(d[v]==d[u]+G[u][v])
+				{
+					pre[v].push_back(u);
+					num[v]+=num[u];
+				}
+			}
+		}
+	}
+}
+void DFS(int v)
+{
+	if(v==0)
+	{
+		tempPath.push_back(0);
+		int happy=0,av=0;
+		for(int i=0;i<tempPath.size();++i)
+		{
+			happy+=weight[tempPath[i]];
+		}
+		av=happy/(tempPath.size()-1);
+		if(happy>maxhappy)
+		{
+			maxhappy=happy;
+			maxav=av;
+			path=tempPath;
+		}
+		else if(happy==maxhappy&&av>maxav)
+		{
+			maxav=av;
+			path=tempPath;
+		}
+		tempPath.pop_back(); 
+	}
+	tempPath.push_back(v);
+	vis[v]=true;
+	for(int i=0;i<pre[v].size();++i)
+	{
+		DFS(pre[v][i]);
+	}
+	tempPath.pop_back();
+}
+int main()
+{
+	int t;
+	string a,b;
+	cin>>n>>k>>S;
+	strToInt[S]=0;
+	intToStr[0]=S;
+	fill(G[0],G[0]+maxn*maxn,INF);
+	for(int i=0;i<n-1;++i)
+	{
+		cin>>a;
+		int id=change(a);
+		if(a=="ROM") ed=id;
+		scanf("%d",&weight[id]);
+	}
+	for(int i=0;i<k;++i)
+	{
+		cin>>a>>b;
+		int u=change(a);
+		int v=change(b);
+		scanf("%d",&t);
+		G[u][v]=G[v][u]=t;
+	}
+	dijkstra(0);
+	fill(vis,vis+maxn,false);
+	DFS(ed);
+	printf("%d %d %d %d\n",num[ed],d[ed],maxhappy,maxav);
+	for(int i=path.size()-1;i>=0;--i)
+	{
+		if(i!=0) cout<<intToStr[path[i]]<<"->";
+		else cout<<intToStr[path[i]];
+	}
+}
