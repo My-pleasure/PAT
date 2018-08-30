@@ -1,0 +1,103 @@
+#include<cstdio>
+#include<vector>
+#include<cstring>
+#include<cmath>
+using namespace std;
+const int maxn=1015;
+const int INF=1000000000;
+int n,m,k,Ds;
+int G[maxn][maxn],d[maxn];
+bool vis[maxn]={false};
+int getID(char s[])
+{
+	int ID=0,len=strlen(s);
+	for(int i=0;i<len;++i)
+	{
+		if(s[i]!='G')
+		{
+			ID=ID*10+s[i]-'0';
+		}
+	}
+	if(s[0]=='G') return n+ID;
+	else return ID;
+}
+void dijkstra(int s)
+{
+	fill(vis,vis+maxn,false);
+	fill(d,d+maxn,INF);
+	d[s]=0;
+	for(int i=1;i<=n+m;++i)
+	{
+		int u=-1,MIN=INF;
+		for(int j=1;j<=n+m;++j)
+		{
+			if(vis[j]==false&&d[j]<MIN)
+			{
+				u=j;
+				MIN=d[j];
+			}
+		}
+		if(u==-1) return;
+		vis[u]=true;
+		for(int v=1;v<=n+m;++v)
+		{
+			if(vis[v]==false&&G[u][v]!=INF&&d[v]>d[u]+G[u][v])
+			{
+				d[v]=d[u]+G[u][v];
+			}
+		}
+	}
+}
+int main()
+{
+	int t;
+	char a[5],b[5];
+	fill(G[0],G[0]+maxn*maxn,INF);
+	scanf("%d%d%d%d",&n,&m,&k,&Ds);
+	for(int i=0;i<k;++i)
+	{
+		scanf("%s %s %d",&a,&b,&t);
+		int id1=getID(a);
+		int id2=getID(b);
+		if(G[id1][id2]>t) G[id1][id2]=G[id2][id1]=t;
+	}
+	double ansDis=-1,ansv=INF;
+	int ansID=-1;
+	for(int i=n+1;i<=n+m;++i)
+	{
+		double minDis=INF,minv=0;
+		dijkstra(i);
+		for(int j=1;j<=n;++j)
+		{
+			if(d[j]>Ds)
+			{
+				minDis=-1;
+				break;
+			}
+			if(d[j]<minDis)
+			{
+				minDis=d[j];
+			}
+			minv+=1.0*d[j];
+		}
+		if(minDis==-1) break;
+		minv/=n;
+		if(minDis>ansDis)
+		{
+			ansv=minv;
+			ansDis=minDis;
+			ansID=i;
+		}
+		else if(minDis==ansDis&&minv<ansv)
+		{
+			ansv=minv;
+			ansID=i;
+		}
+	}
+	if(ansID==-1) printf("No Solution\n");
+	else
+	{
+		printf("G%d\n",ansID-n);
+		printf("%.1f %.1f",ansDis,ansv);
+	}
+}
