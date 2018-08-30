@@ -1,0 +1,50 @@
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+const int maxn=10005;
+int n;
+int dp[maxn],f[maxn];
+bool flag=true;
+int main()
+{
+	scanf("%d",&n);
+	for(int i=0;i<n;++i)
+	{
+		scanf("%d",&f[i]);
+		if(f[i]>=0) flag=false;
+	}
+	if(flag==true)
+	{
+		printf("0 %d %d",f[0],f[n-1]);
+	}
+	else
+	{
+		dp[0]=f[0];
+		for(int i=1;i<n;++i)
+		{
+			dp[i]=max(f[i],f[i]+dp[i-1]);
+		}
+		int last=0,first=0;
+		for(int i=1;i<n;++i)
+		{
+			if(dp[last]<dp[i])
+			{
+				last=i;
+			}
+		}
+		int qiu=dp[last];
+		first=last;
+		if(qiu==0)
+		{
+			printf("%d %d %d",dp[last],f[first],f[last]);
+			return 0;
+		}
+		do
+		{
+			qiu-=f[first--];
+		}while(qiu!=0);
+		printf("%d %d %d",dp[last],f[first+1],f[last]);
+		return 0;
+	}	
+}
