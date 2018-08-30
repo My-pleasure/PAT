@@ -1,0 +1,44 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int dp[1005][1005],ans=1,L;
+char s[1005];
+int main()
+{
+	fgets(s,1005,stdin);
+	int len=strlen(s);
+	if(s[len-1]=='\n'&&s[len]=='\0')
+	{
+	  s[len-1]='\0';
+	}
+	fill(dp[0],dp[0]+1005*1005,0);
+	L=2;
+	for(int i=0;i<len-1;++i)
+	{
+		dp[i][i]=1;
+		int j=i+1;
+			if(s[i]==s[j])
+			{
+				dp[i][j]=1;
+				ans=L;
+			}
+	}
+	for(int l=3;l<=len;++l)
+	{
+		for(int i=0;i+l-1<len;++i)
+		{
+			int j=i+l-1;
+			if(s[i]==s[j]&&dp[i+1][j-1]==1)
+			{
+				dp[i][j]=1;
+				ans=l;
+			}
+			else
+			{
+				dp[i][j]=0;
+			}
+		}
+	}
+	printf("%d",ans);
+}
