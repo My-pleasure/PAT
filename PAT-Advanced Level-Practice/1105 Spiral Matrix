@@ -1,0 +1,71 @@
+#include<iostream>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn = 10005;
+int a[maxn], matrix[maxn][maxn], N;
+bool cmp(int a, int b)
+{
+	return a > b;
+}
+int main()
+{
+	scanf("%d", &N);
+	for (int i = 0; i<N; ++i)
+	{
+		scanf("%d", &a[i]);
+	}
+	if (N == 1)
+	{
+		printf("%d", a[0]);
+		return 0;
+	}
+	int m, n, sqr = sqrt(N);
+	for (n = 1; n <= sqr; ++n)
+	{
+		if (N%n == 0)
+		{
+			m = N / n;
+		}
+	}
+	n = N / m;
+	sort(a, a + N, cmp);
+	int i = 0, j = 0, L = -1, U = 0, D = m, R = n, num = 0;
+	while (num<N)
+	{
+		while (num<N&&j<R)
+		{
+			matrix[i][j] = a[num++];
+			++j;
+		}
+		--R; --j; ++i;
+		while (num<N&&i<D)
+		{
+			matrix[i][j] = a[num++];
+			++i;
+		}
+		--D; --i; --j;
+		while (num<N&&j>L)
+		{
+			matrix[i][j] = a[num++];
+			--j;
+		}
+		++L; ++j; --i;
+		while (num<N&&i>U)
+		{
+			matrix[i][j] = a[num++];
+			--i;
+		}
+		++U; ++i; ++j;
+		if (num == N - 1) matrix[i][j] = a[num++];
+	}
+	for (int i = 0; i<m; ++i)
+	{
+		for (int j = 0; j<n; ++j)
+		{
+			if (j == 0) printf("%d", matrix[i][j]);
+			else printf(" %d", matrix[i][j]);
+		}
+		printf("\n");
+	}
+}
