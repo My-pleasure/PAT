@@ -1,0 +1,48 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+using namespace std;
+int main()
+{
+	int w[10],c[10],dp[10][10],ddp[10]={0},dpp[10]={0};
+	int n,V;
+	scanf("%d%d",&n,&V);
+	for(int i=1;i<=n;++i)
+	{
+		cin>>w[i];
+	}
+	for(int i=1;i<=n;++i)
+	{
+		cin>>c[i];
+	}
+	fill(dp[0],dp[0]+10*10,0);        
+	int ans=0;
+	//01背包二维 
+/*	for(int i=1;i<=n;++i)
+	{
+		for(int v=w[i];v<=V;++v)
+		{
+			dp[i][v]=max(dp[i-1][v],dp[i-1][v-w[i]]+c[i]);
+			ans=max(ans,dp[i][v]);
+		}
+	}*/
+	//01背包一维 
+	/*for(int i=1;i<=n;++i)
+	{
+		for(int v=V;v>=w[i];--v)
+		{
+			ddp[v]=max(ddp[v],ddp[v-w[i]]+c[i]);
+			ans=max(ans,ddp[v]);
+		}
+	}*/
+	//完全背包一维 
+	for(int i=1;i<=n;++i)
+	{
+		for(int v=w[i];v<=V;++v)
+		{
+			dpp[v]=max(dpp[v],dpp[v-w[i]]+c[i]);
+			ans=max(ans,dpp[v]);
+		}
+	}
+	printf("%d",ans);
+}
