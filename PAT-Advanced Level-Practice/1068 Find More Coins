@@ -1,0 +1,57 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+const int maxn=10005;
+int n,V,a[maxn],dp[105],choice[maxn][105];
+bool cmp(int a,int b)
+{
+	return a>b;
+}
+int main()
+{
+	cin>>n>>V;
+	for(int i=1;i<=n;++i)
+	{
+		cin>>a[i];
+	}
+	sort(a+1,a+n+1,cmp);
+	dp[0]=0;
+	for(int i=1;i<=n;++i)
+	{
+		for(int v=V;v>=a[i];--v)
+		{
+			if(dp[v]<=dp[v-a[i]]+a[i])
+			{
+				dp[v]=dp[v-a[i]]+a[i];
+				choice[i][v]=1;
+			}
+			else choice[i][v]=0;
+		}
+	}
+	if(dp[V]!=V)
+	{
+		printf("No Solution");
+		return 0;
+	}
+	int k=n,num=0,v=V,flag[maxn];
+	while(k>0)
+	{
+		if(choice[k][v]==1)
+		{
+			flag[k]=1;
+			v-=a[k];
+			++num;
+		}
+		else flag[k]=0;
+		--k;
+	}
+	for(int i=n;i>0;--i)
+	{
+		if(flag[i]==1)
+		{
+			if(num!=1) printf("%d ",a[i]);
+			else printf("%d",a[i]);
+			--num;
+		}
+	}
+}
