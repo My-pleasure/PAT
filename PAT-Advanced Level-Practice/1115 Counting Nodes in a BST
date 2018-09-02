@@ -1,0 +1,53 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+struct Node
+{
+	int data;
+	Node* lchild;
+	Node* rchild;
+};
+int N, maxdep = 0, num[1001] = { 0 };
+void insert(Node* &root,int x)
+{
+	if (root == NULL)
+	{
+		root = new Node;
+		root->data = x;
+		root->lchild = root->rchild = NULL;
+		return;
+	}
+	if (root->data >= x)
+	{
+		insert(root->lchild,x);
+	}
+	else
+	{
+		insert(root->rchild,x);
+	}
+}
+void DFS(Node* root, int dep)
+{
+	if (root==NULL)
+	{
+		maxdep = max(dep, maxdep);
+		return;
+	}
+	num[dep]++;
+	DFS(root->lchild, dep + 1);
+	DFS(root->rchild, dep + 1);
+}
+int main()
+{
+	int a[1005];
+	scanf("%d", &N);
+	Node* root = new Node;
+	root = NULL;
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d", &a[i]);
+		insert(root, a[i]);
+	}
+	DFS(root, 0);
+	printf("%d + %d = %d", num[maxdep-1], num[maxdep - 2], num[maxdep-2] + num[maxdep - 1]);
+}
