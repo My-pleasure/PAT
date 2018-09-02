@@ -1,0 +1,68 @@
+#include<iostream>
+#include<queue>
+#include<string>
+using namespace std;
+struct Node
+{
+	int lchild, rchild;
+}n[21];
+int N, root;
+int main()
+{
+	int father[21];
+	string a, b;
+	fill(father, father + 21, 0);
+	cin >> N;
+	for (int i = 0; i < N; ++i)
+	{
+		cin >> a >> b;
+		if (a != "-")
+		{
+			n[i].lchild = stoi(a);
+			father[n[i].lchild] = 1;
+		}
+		else n[i].lchild = -1;
+		if (b != "-")
+		{
+			n[i].rchild = stoi(b);
+			father[n[i].rchild] = 1;
+		}
+		else n[i].rchild = -1;
+	}
+	for (int i = 0; i < N; ++i)
+	{
+		if (father[i] == 0)
+		{
+			root = i;
+			break;
+		}
+	}
+	int cnt = 0, pre = 0;
+	queue<int> q;
+	q.push(root);
+	while (!q.empty())
+	{
+		int now = q.front();
+		q.pop();
+		if (now != -1)
+		{
+			pre = now;
+			++cnt;
+		}
+		else
+		{
+			if (cnt != N)
+			{
+				printf("NO %d\n", root);
+			}
+			else
+			{
+				printf("YES %d\n", pre);
+			}
+			return 0;
+		}
+		q.push(n[now].lchild);
+		q.push(n[now].rchild);
+	}
+	return 0;
+}
