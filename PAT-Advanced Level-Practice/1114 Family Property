@@ -1,0 +1,98 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+struct data
+{
+	int id, fid, mid, cid[5], m, area;
+}d[1005];
+struct node
+{
+	int id, peo = 0;
+	double set = 0, area = 0;
+	bool flag = false;
+}ans[10000];
+int father[10000];
+bool vis[10000];
+int findFather(int x)
+{
+	while (x != father[x])
+	{
+		x = father[x];
+	}
+	return x;
+}
+void Union(int a, int b)
+{
+	int faA = findFather(a);
+	int faB = findFather(b);
+	if (faA > faB)
+	{
+		father[faA] = faB;
+	}
+	else if (faA < faB)
+	{
+		father[faB] = faA;
+	}
+}
+bool cmp(node a, node b)
+{
+	if (a.area != b.area) return a.area > b.area;
+	else return a.id < b.id;
+}
+int main()
+{
+	int N, k;
+	scanf("%d", &N);
+	for(int i = 0; i < 10000; ++i)
+	{
+		father[i] = i;
+	}
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d%d%d%d", &d[i].id, &d[i].fid, &d[i].mid, &k);
+		if (d[i].fid != -1) Union(d[i].id, d[i].fid);
+		if (d[i].mid != -1) Union(d[i].id, d[i].mid);
+		vis[d[i].id] = vis[d[i].fid] = vis[d[i].mid] = true;
+		for (int j = 0; j < k; ++j)
+		{
+			scanf("%d", &d[i].cid[j]);
+			Union(d[i].id, d[i].cid[j]);
+			vis[d[i].cid[j]] = true;
+		}
+		scanf("%d%d",&d[i].m,&d[i].area);
+	}
+	for (int i = 0; i < N; ++i)
+	{
+		int id = findFather(d[i].id);
+		ans[id].id = id;
+		ans[id].set += d[i].m;
+		ans[id].area += d[i].area;
+		ans[id].flag = true;
+	}
+	int cnt = 0;
+	for (int i = 0; i < 10000; ++i)
+	{
+		if (vis[i])
+		{
+			ans[findFather(i)].peo++;
+		}
+		if (ans[i].flag)
+		{
+			++cnt;
+		}
+	}
+	for (int i = 0; i < 10000; ++i)
+	{
+		if (ans[i].flag)
+		{
+			ans[i].set /= ans[i].peo;
+			ans[i].area /= ans[i].peo;
+		}
+	}
+	sort(ans, ans + 10000, cmp);
+	printf("%d\n", cnt);
+	for (int i = 0; i < cnt; ++i)
+	{
+		printf("%04d %d %.3lf %.3lf\n", ans[i].id, ans[i].peo, ans[i].set, ans[i].area);
+	}
+}
