@@ -1,0 +1,61 @@
+#include<iostream>
+#include<cmath>
+using namespace std;
+int hashtable[10000] = { 0 };
+bool flag[10000] = { false };
+int Prime(int id)
+{
+	int sqr = sqrt(id);
+	for (int i = 2; i <= sqr; ++i)
+	{
+		if (id%i == 0)
+		{
+			return 0;
+		}
+	}
+	return 1;
+}
+void check(int id)
+{
+	if (flag[id] == true)
+	{
+		printf("%04d: Checked\n",id);
+	}
+	else if (hashtable[id] == 0)
+	{
+		printf("%04d: Are you kidding?\n", id);
+	}
+	else if (hashtable[id] == 1)
+	{
+		printf("%04d: Mystery Award\n",id);
+		flag[id] = true;
+	}
+	else if (Prime(hashtable[id]) == 1)
+	{
+		printf("%04d: Minion\n",id);
+		flag[id] = true;
+	}
+	else if (Prime(hashtable[id]) == 0)
+	{
+		printf("%04d: Chocolate\n",id);
+		flag[id] = true;
+	}
+}
+int main()
+{
+	int N, id, k;
+	scanf("%d", &N);
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d", &id);
+		hashtable[id] = i + 1;
+	}
+	scanf("%d", &k);
+	int query;
+	for (int i = 0; i < k; ++i)
+	{
+		scanf("%d", &query);
+		check(query);
+	}
+	return 0;
+}
