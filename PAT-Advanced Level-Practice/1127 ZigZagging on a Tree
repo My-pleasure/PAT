@@ -1,0 +1,92 @@
+#include<iostream>
+#include<queue>
+#include<vector>
+using namespace std;
+int post[31], in[31];
+int N, maxlay = 0;
+vector<int> vi[31];
+struct node
+{
+	int data, lay;
+	node* lchild;
+	node* rchild;
+};
+node* Create(int inL, int inR, int postL, int postR)
+{
+	if (postL > postR)
+	{
+		return NULL;
+	}
+	node* root = new node;
+	root->data = post[postR];
+	root->lchild = root->rchild = NULL;
+	int k;
+	for (k = inL; k <= inR; ++k)
+	{
+		if (in[k] == post[postR]) break;
+	}
+	int numLeft = k - inL;
+	root->lchild = Create(inL, k - 1, postL, postL + numLeft - 1);
+	root->rchild = Create(k + 1, inR, postL + numLeft, postR - 1);
+	return root;
+}
+void BFS(node* root)
+{
+	queue<node*> q;
+	root->lay = 0;
+	q.push(root);
+	while (!q.empty())
+	{
+		node* now = q.front();
+		q.pop();
+		vi[now->lay].push_back(now->data);
+		if (maxlay < now->lay)
+		{
+			maxlay = now->lay;
+		}
+		if (now->lchild != NULL)
+		{
+			now->lchild->lay = now->lay + 1;
+			q.push(now->lchild);
+		}
+		if (now->rchild != NULL)
+		{
+			now->rchild->lay = now->lay + 1;
+			q.push(now->rchild);
+		}
+	}
+}
+int main()
+{
+	scanf("%d", &N);
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d", &in[i]);
+	}
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d", &post[i]);
+	}
+	node* root = new node;
+	root = NULL;
+	root = Create(0, N - 1, 0, N - 1);
+	BFS(root);
+	printf("%d", vi[0][0]);
+	for (int i = 1; i <= maxlay; ++i)
+	{
+		if (i % 2 == 0)
+		{
+			for (int j = vi[i].size() - 1; j >= 0; --j)
+			{
+				printf(" %d", vi[i][j]);
+			}
+		}
+		else
+		{
+			for (int j = 0; j < vi[i].size(); ++j)
+			{
+				printf(" %d", vi[i][j]);
+			}
+		}
+	}
+}
