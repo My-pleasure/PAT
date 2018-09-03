@@ -1,0 +1,35 @@
+#include<iostream>
+#include<string>
+#include<set>
+using namespace std;
+int getID(string str)
+{
+	int ID = 0;
+	int len = str.length();
+	for (int i = 0; i < len; ++i)
+	{
+		ID += str[i] - '0';
+	}
+	return ID;
+}
+set<int> st;
+int main()
+{
+	int N, id;
+	string s;
+	scanf("%d", &N);
+	for (int i = 0; i < N; ++i)
+	{
+		cin >> s;
+		id = getID(s);
+		st.insert(id);
+	}
+	int num = 0;
+	printf("%d\n", st.size());
+	for (set<int>::iterator it = st.begin(); it != st.end(); ++it)
+	{
+		printf("%d", *it);
+		++num;
+		if (num < st.size()) printf(" ");
+	}
+}
