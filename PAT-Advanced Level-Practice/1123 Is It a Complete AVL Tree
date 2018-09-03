@@ -1,0 +1,140 @@
+#include<iostream>
+#include<algorithm>
+#include<queue>
+using namespace std;
+struct Node
+{
+	int data;
+	int height;
+	Node* lchild;
+	Node* rchild;
+};
+int num = 0, MAX;
+int N, temp;
+int getHeight(Node* n)
+{
+	if (n == NULL) return 0;
+	return n->height;
+}
+int getBlanceFactor(Node* n)
+{
+	return getHeight(n->lchild) - getHeight(n->rchild);
+}
+void updateHeight(Node* n)
+{
+	n->height = max(getHeight(n->lchild), getHeight(n->rchild)) + 1;
+}
+void L(Node* &root)
+{
+	Node* temp = root->rchild;
+	root->rchild = temp->lchild;
+	temp->lchild = root;
+	updateHeight(root);
+	updateHeight(temp);
+	root = temp;
+}
+void R(Node* &root)
+{
+	Node* temp = root->lchild;
+	root->lchild = temp->rchild;
+	temp->rchild = root;
+	updateHeight(root);
+	updateHeight(temp);
+	root = temp;
+}
+void insert(Node* &root, int x)
+{
+	if (root == NULL)
+	{
+		root = new Node;
+		root->data = x;
+		root->height = 1;
+		root->lchild = root->rchild = NULL;
+		return;
+	}
+	if (x <= root->data)
+	{
+		insert(root->lchild, x);
+		updateHeight(root);
+		if (getBlanceFactor(root) == 2)
+		{
+			if (getBlanceFactor(root->lchild) == 1)
+			{
+				R(root);
+			}
+			else if (getBlanceFactor(root->lchild) == -1)
+			{
+				L(root->lchild);
+				R(root);
+			}
+		}
+	}
+	else
+	{
+		insert(root->rchild, x);
+		updateHeight(root);
+		if (getBlanceFactor(root) == -2)
+		{
+			if (getBlanceFactor(root->rchild) == -1)
+			{
+				L(root);
+			}
+			else if (getBlanceFactor(root->rchild) == 1)
+			{
+				R(root->rchild);
+				L(root);
+			}
+		}
+	}
+}
+void BFS(Node* root)
+{
+	queue<Node*> q;
+	q.push(root);
+	while (!q.empty())
+	{
+		Node* now = q.front();
+		q.pop();
+		printf("%d", now->data);
+		++num;
+		if (num < N) printf(" ");
+		if(now->lchild!=NULL) q.push(now->lchild);
+		if(now->rchild!=NULL) q.push(now->rchild);
+	}
+}
+void BFS_MAX(Node* root)
+{
+	int num = 0;
+	queue<Node*> q;
+	q.push(root);
+	while (!q.empty())
+	{
+		Node* now = q.front();
+		q.pop();
+		++num;
+		if (now == NULL)
+		{
+			MAX = num;
+			break;
+		}
+		q.push(now->lchild);
+		q.push(now->rchild);
+	}
+}
+int main()
+{
+	Node* root = new Node;
+	root = NULL;
+	scanf("%d", &N);
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d", &temp);
+		insert(root, temp);
+	}
+	BFS(root);
+	printf("\n");
+	BFS_MAX(root);
+	if (MAX-1 == N) printf("YES");
+	else printf("NO");
+	return 0;
+}
