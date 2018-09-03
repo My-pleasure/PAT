@@ -1,0 +1,48 @@
+#include<iostream>
+using namespace std;
+const int INF=1000000000;
+int G[510][510], vex[510] = { 0 };
+bool vis[510] = { false };
+int N, cnt = 0,M;
+void DFS(int s)
+{
+	vis[s] = true;
+	++cnt;
+	for (int i = 1; i <= N; ++i)
+	{
+		if (vis[i] == false && G[s][i] == 1)
+		{
+			DFS(i);
+		}
+	}
+}
+int main()
+{
+	int u, v;
+	int odd = 0, even = 0;
+	fill(G[0], G[0] + 510 * 510, INF);
+	scanf("%d%d", &N, &M);
+	for (int i = 0; i < M; ++i)
+	{
+		scanf("%d%d", &u, &v);
+		vex[u]++;
+		vex[v]++;
+		G[u][v] = G[v][u] = 1;
+	}
+	for (int i = 1; i <= N; ++i)
+	{
+		if (vex[i] % 2 != 0) odd++;
+		else even++;
+	}
+	DFS(1);
+	for(int i=1;i<=N;++i)
+	{
+	  printf("%d", vex[i]);
+		if (i < N) printf(" ");
+		else printf("\n");
+	}
+	if (even==N && cnt == N) printf("Eulerian");
+	else if (odd == 2 && cnt == N) printf("Semi-Eulerian");
+	else printf("Non-Eulerian");
+	return 0;
+}
