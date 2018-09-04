@@ -1,0 +1,35 @@
+#include<iostream>
+using namespace std;
+const int maxn = 50005;
+int N, pre[maxn], in[maxn];
+int ans;
+void findpost(int preL, int preR, int inL, int inR)
+{
+	if (preL == preR)
+	{
+		ans = pre[preL];
+		return;
+	}
+	int k;
+	for (k = inL; k <= inR; ++k)
+	{
+		if (pre[preL] == in[k]) break;
+	}
+	int numLeft = k - inL;
+	if (numLeft == 0) findpost(preL + numLeft+1, preR, k + 1, inR);
+	else findpost(preL + 1, preL + numLeft, inL, k - 1);
+}
+int main()
+{
+	scanf("%d", &N);
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d", &pre[i]);
+	}
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d", &in[i]);
+	}
+	findpost(0, N - 1, 0, N - 1);
+	printf("%d", ans);
+}
