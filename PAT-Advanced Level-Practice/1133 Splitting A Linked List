@@ -1,0 +1,44 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+struct node
+{
+	int id, data, next;
+}n[100005];
+int first, N, K;
+vector<int> vi, ans;
+int main()
+{
+	int addr, data, next;
+	scanf("%d%d%d", &first, &N, &K);
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d%d%d", &addr, &data, &next);
+		n[addr].id = addr;
+		n[addr].data = data;
+		n[addr].next = next;
+	}
+	for (; first != -1; first = n[first].next)
+	{
+		vi.push_back(first);
+	}
+	for (int i = 0; i < vi.size(); ++i)
+	{
+		if (n[vi[i]].data < 0) ans.push_back(vi[i]);
+	}
+	for (int i = 0; i < vi.size(); ++i)
+	{
+		if (n[vi[i]].data >= 0 && n[vi[i]].data <= K) ans.push_back(vi[i]);
+	}
+	for (int i = 0; i < vi.size(); ++i)
+	{
+		if (n[vi[i]].data > K) ans.push_back(vi[i]);
+	}
+	for (int i = 0; i < ans.size()-1; ++i)
+	{
+		n[ans[i]].next = n[ans[i+1]].id;
+		printf("%05d %d %05d\n", n[ans[i]].id, n[ans[i]].data, n[ans[i]].next);
+	}
+	printf("%05d %d -1", n[ans[ans.size()-1]].id, n[ans[ans.size()-1]].data);
+}
