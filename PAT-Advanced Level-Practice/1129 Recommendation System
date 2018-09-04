@@ -1,0 +1,43 @@
+#include<iostream>
+#include<set>
+using namespace std;
+int vis[50005] = { 0 };
+struct node
+{
+	int id;
+	int fre = 0;
+	node(int a, int b) :id(a), fre(b) {}
+};
+struct symcmp
+{
+  bool operator()(const node& a,const node& b)const
+  {
+    if(a.fre!=b.fre) return a.fre>b.fre;
+    else return a.id<b.id;
+  }
+};
+set<node,symcmp> s;
+int main()
+{
+	int N, K, temp;
+	scanf("%d%d", &N, &K);
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d", &temp);
+		if (i != 0)
+		{
+			int num = 0;
+			printf("%d:", temp);
+			for (auto it = s.begin(); num<K&&it != s.end(); ++it)
+			{
+				printf(" %d", it->id);
+				++num;
+			}
+			printf("\n");
+		}
+		auto it = s.find(node{ temp,vis[temp] });
+		if (it != s.end()) s.erase(it);
+		vis[temp]++;
+		s.insert(node{ temp,vis[temp] });
+	}
+}
