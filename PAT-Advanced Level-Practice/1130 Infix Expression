@@ -1,0 +1,45 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int N;
+int father[21];
+struct node
+{
+	string data;
+	int lchild, rchild;
+}n[21];
+string DFS(int root)
+{
+	if (n[root].lchild == -1 && n[root].rchild == -1) return n[root].data;
+	if (n[root].lchild == -1 && n[root].rchild != -1) return "(" + n[root].data + DFS(n[root].rchild) + ")";
+	if (n[root].lchild != -1 && n[root].rchild != -1) return "(" + DFS(n[root].lchild) + n[root].data + DFS(n[root].rchild) + ")";
+}
+int main()
+{
+	for (int i = 0; i < 21; ++i)
+	{
+		father[i] = i;
+	}
+	scanf("%d", &N);
+	getchar();
+	for (int i = 1; i <= N; ++i)
+	{
+		cin >> n[i].data;
+		scanf("%d %d", &n[i].lchild, &n[i].rchild);
+		father[n[i].lchild] = i;
+		father[n[i].rchild] = i;
+	}
+	int root;
+	for (int i = 1; i <= N; ++i)
+	{
+		if (i == father[i])
+		{
+			root = i;
+			break;
+		}
+	}
+	string ans;
+	ans=DFS(root);
+	if (ans[0] == '(') ans = ans.substr(1, ans.size() - 2);
+	cout << ans;
+}
