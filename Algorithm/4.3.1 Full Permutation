@@ -1,0 +1,32 @@
+#include<iostream>
+using namespace std;
+const int maxn = 20;
+int p[maxn], hashtable[maxn] = { false }, n;
+void permutationx(int index)
+{
+	if (index == n + 1)
+	{
+		for (int i = 1; i <= n; ++i)
+		{
+			printf("%d", p[i]);
+			if (i < n) printf(" ");
+		}
+		printf("\n");
+		return;
+	}
+	for (int x = 1; x <= n; ++x)
+	{
+		if (hashtable[x] == false)
+		{
+			p[index] = x;
+			hashtable[x] = true;
+			permutationx(index + 1);
+			hashtable[x] = false;
+		}
+	}
+}
+int main()
+{
+	cin >> n;
+	permutationx(1);
+}
