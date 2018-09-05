@@ -1,0 +1,54 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int nv, ne, m, N, hashtable[205];
+vector<int> vi[205], qu;
+bool isclique, ismax;
+void judge(int n)
+{
+	for (int i = 0; i < n; ++i)
+	{
+		int now = qu[i];
+		for (int j = 0; j < vi[now].size(); ++j)
+		{
+			hashtable[vi[now][j]]++;
+		}
+	}
+	for (int i = 0; i < n; ++i)
+	{
+		if (hashtable[qu[i]] != n - 1) isclique = false;
+		hashtable[qu[i]] = 0;
+	}
+	for (int i = 1; i <= nv; ++i)
+	{
+		if (hashtable[i] == n) ismax = false;
+	}
+}
+int main()
+{
+	int u, v;
+	scanf("%d%d", &nv, &ne);
+	for (int i = 0; i < ne; ++i)
+	{
+		scanf("%d%d", &u, &v);
+		vi[u].push_back(v);
+		vi[v].push_back(u);
+	}
+	scanf("%d", &m);
+	for (int i = 0; i < m; ++i)
+	{
+		scanf("%d", &N);
+		qu.clear();
+		fill(hashtable, hashtable + 205, 0);
+		for (int j = 0; j < N; ++j)
+		{
+			scanf("%d", &u);
+			qu.push_back(u);
+		}
+		isclique = true; ismax = true;
+		judge(N);
+		if (isclique&&ismax) printf("Yes\n");
+		else if (isclique && !ismax) printf("Not Maximal\n");
+		else printf("Not a Clique\n");
+	}
+}
