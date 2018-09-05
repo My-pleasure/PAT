@@ -1,0 +1,89 @@
+#include<iostream>
+#include<vector>
+#include<unordered_map>
+using namespace std;
+vector<int> vi[10000], tempPath, path;
+unordered_map<int, int> line;
+int N, M, K, vis[10000];
+int start, ed, minsize;
+void DFS(int v)
+{
+	if (v == ed)
+	{
+		tempPath.push_back(v);
+		if (minsize > tempPath.size())
+		{
+			path = tempPath;
+			minsize = tempPath.size();
+		}
+		else if (minsize == tempPath.size())
+		{
+			int tempP = 0, t = 0, preline = 0;
+			for (int i = 0; i < tempPath.size() - 1; ++i)
+			{
+				if (line[tempPath[i]*10000+tempPath[i+1]]!=preline) tempP++;
+				preline = line[tempPath[i] * 10000 + tempPath[i + 1]];
+			}
+			preline = 0;
+			for (int i = 0; i < path.size() - 1; ++i)
+			{
+				if (line[path[i] * 10000 + path[i + 1]] != preline) t++;
+				preline = line[path[i] * 10000 + path[i + 1]];
+			}
+			if (t > tempP) path = tempPath;
+		}
+		tempPath.pop_back();
+		return;
+	}
+	tempPath.push_back(v);
+	vis[v] = true;
+	for (int i = 0; i < vi[v].size(); ++i)
+	{
+		if (vis[vi[v][i]] == false)
+		{			
+		  vis[vi[v][i]] = true;
+			DFS(vi[v][i]);
+      vis[vi[v][i]]=false;
+		}
+	}
+	tempPath.pop_back();
+}
+int main()
+{
+	int u, v;
+	scanf("%d", &N);
+	for (int i = 1; i <= N; ++i)
+	{
+		scanf("%d%d", &M, &u);
+		for (int j = 1; j < M; ++j)
+		{
+			scanf("%d", &v);
+			vi[u].push_back(v);
+			vi[v].push_back(u);
+			line[u * 10000 + v] = line[v * 10000 + u] = i;
+			u = v;
+		}
+	}
+	scanf("%d", &K);
+	for (int i = 0; i < K; ++i)
+	{
+		scanf("%d%d", &start, &ed);
+		fill(vis, vis + 10000, false);
+		int preline = 0, preTra = start;
+		minsize = 10001;
+		tempPath.clear();
+		path.clear();
+		DFS(start);
+		printf("%d\n", path.size() - 1);
+		for (int j = 0; j < path.size()-1; ++j)
+		{
+			if (line[path[j] * 10000 + path[j+1]] != preline)
+			{
+				if (preline != 0) printf("Take Line#%d from %04d to %04d.\n", preline, preTra, path[j]);
+				preline = line[path[j] * 10000 + path[j+1]];
+				preTra = path[j];
+			}
+		}
+		printf("Take Line#%d from %04d to %04d.\n", preline, preTra, ed);
+	}
+}
