@@ -1,0 +1,38 @@
+#include<iostream>
+#include<queue>
+#include<vector>
+#include<functional>
+#include<string>
+#include<utility>
+using namespace std;
+priority_queue<int,vector<int>,greater<int> > q;
+struct fruit
+{
+	string name;
+	int price;
+	friend bool operator < (fruit a,fruit b)
+	{
+		return a.price > b.price;
+	}
+};
+struct symcmp
+{
+	bool operator()(const fruit &a, const fruit &b)
+	{
+		return a.price < b.price;
+	}
+};
+priority_queue<fruit> qf;
+int main()
+{
+	qf.push(fruit{"apple",3});
+	qf.push(fruit{ "pier",1 });
+	qf.push(fruit{ "banana",4 });
+	//pair常用于map的应用
+/*	pair<string, int> p;
+	p.first = "haha";
+	p.second = 5;
+	p = pair<string, int>("xixi", 6);
+	p = make_pair("heihei", 7);*/
+	printf("%d", qf.top().price);
+}
