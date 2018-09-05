@@ -1,52 +1,41 @@
 #include<iostream>
 #include<set>
 using namespace std;
-int hashtable[100000] = { 0 }, flag[100000] = { 0 };
+int hashtable[100000], flag[100000];
 set<int> s;
 int main()
 {
 	int N, a, b, M;
-	scanf_s("%d", &N);
+	fill(hashtable,hashtable+100000,-1);
+	fill(flag,flag+100000,-1);
+	scanf("%d", &N);
 	for (int i = 0; i < N; ++i)
 	{
-		scanf_s("%d%d", &a, &b);
+		scanf("%d%d", &a, &b);
 		hashtable[a] = b;
 		hashtable[b] = a;
 	}
-	scanf_s("%d", &M);
+	scanf("%d", &M);
+	int A[10005];
 	for (int i = 0; i < M; ++i)
 	{
-		scanf_s("%d", &a);
-		if (hashtable[a] != 0)
+		scanf("%d", &A[i]);
+		if (hashtable[A[i]] != -1)
 		{
-			if (flag[hashtable[a]] == 0)
-			{
-				flag[a] = 1;
-			}
-			else if (flag[hashtable[a]] == 1)
-			{
-				flag[a] = 2;
-				flag[hashtable[a]] = 2;
-			}
-		}
-		else
-		{
-			flag[a] = 1;
+		  flag[hashtable[A[i]]]=1;
 		}
 	}
-	for (int i = 0; i < 100000; ++i)
+	for (int i = 0; i < M; ++i)
 	{
-		if (flag[i] == 1)
+		if (flag[A[i]] == -1)
 		{
-			s.insert(i);
+			s.insert(A[i]);
 		}
 	}
 	printf("%d\n", s.size());
-	int num = 0;
 	for (set<int>::iterator it = s.begin(); it != s.end(); ++it)
 	{
+	  if (it!=s.begin()) printf(" ");
 		printf("%05d", *it);
-		num++;
-		if (num < s.size()) printf(" ");
 	}
 }
