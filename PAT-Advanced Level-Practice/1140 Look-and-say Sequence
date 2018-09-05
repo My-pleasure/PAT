@@ -1,0 +1,45 @@
+#include<iostream>
+#include<string>
+using namespace std;
+string s;
+int N;
+string look_say(string s)
+{
+	int len = s.length();
+	char number = s[0];
+	int cnt = 1;
+	string ans;
+	if (len == 1)
+	{
+		ans += s[0];
+		ans += '1';
+		return ans;
+	}
+	for (int i = 1; i < len; ++i)
+	{
+		if (number == s[i])
+		{
+			++cnt;
+		}
+		else
+		{
+			ans += number;
+			ans += char(cnt + '0');
+			number = s[i];
+			cnt = 1;
+		}
+	}
+	ans += number;
+	ans += char(cnt + '0');
+	return ans;
+}
+int main()
+{
+	cin >> s >> N;
+	string ans = s;
+	while (--N)
+	{
+		ans = look_say(ans);
+	}
+	cout << ans;
+}
