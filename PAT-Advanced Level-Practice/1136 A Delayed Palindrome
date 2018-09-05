@@ -1,0 +1,94 @@
+#include<iostream>
+#include<string>
+using namespace std;
+struct bign
+{
+	int d[1005];
+	int len;
+	bign()
+	{
+		fill(d,d+1005,0);
+		len = 0;
+	}
+};
+bign invert(bign b)
+{
+	bign a;
+	a.len = b.len;
+	for (int i = 0; i < a.len; ++i)
+	{
+		a.d[i] = b.d[a.len - 1 - i];
+	}
+	return a;
+}
+bign change(string s)
+{
+	bign a;
+	a.len = s.length();
+	for (int i = 0; i < a.len; ++i)
+	{
+		a.d[i] = s[a.len - i - 1] - '0';
+	}
+	return a;
+}
+bign add(bign a, bign b)
+{
+	bign c;
+	int carry = 0;
+	for (int i = 0; i < a.len&&i < b.len; ++i)
+	{
+		int temp = a.d[i] + b.d[i] + carry;
+		carry = temp / 10;
+		c.d[c.len++] = temp % 10;
+	}
+	if (carry != 0) c.d[c.len++] = carry;
+	return c;
+}
+void Print(bign a)
+{
+	for (int i = a.len - 1; i >= 0; --i)
+	{
+		printf("%d", a.d[i]);
+	}
+}
+bool judge(bign a)
+{
+	for (int i = 0; i < a.len / 2; ++i)
+	{
+		if (a.d[i] != a.d[a.len - 1 - i]) return false;
+	}
+	return true;
+}
+void Palidromic(string s)
+{
+	int k = 0;
+	bign a = change(s), b;
+	while (k < 10)
+	{
+		if (judge(a))
+		{
+			Print(a);
+			printf(" is a palindromic number.\n");
+			break;
+		}
+		else
+		{
+			Print(a);
+			printf(" + ");
+			b = invert(a);
+			Print(b);
+			printf(" = ");
+			a = add(a, b);
+			Print(a);
+			printf("\n");
+			++k;
+		}
+	}
+	if (k == 10) printf("Not found in 10 iterations.\n");
+}
+int main()
+{
+	string s;
+	cin >> s;
+	Palidromic(s);
+}
