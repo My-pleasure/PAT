@@ -1,0 +1,51 @@
+#include<iostream>
+using namespace std;
+const int maxn = 100005;
+const int INF = 100000000;
+int n, m, sum[maxn];
+int main()
+{
+	int temp, tempsum = 0;
+	scanf("%d%d", &n, &m);
+	for (int i = 1; i <= n; ++i)
+	{
+		scanf("%d", &temp);
+		tempsum += temp;
+		sum[i] = tempsum;
+	}
+	int i = 1, j = 1, nearm = INF;
+	bool flag = false;
+	while (i <= n&&j <= n)
+	{
+		if (sum[j] - sum[i - 1] < m) ++j;
+		else if (sum[j] - sum[i - 1] == m)
+		{
+			flag = true;
+			printf("%d-%d\n", i, j);
+			i++;
+		}
+		else if (sum[j] - sum[i - 1] > m)
+		{
+			if (sum[j] - sum[i - 1]< nearm)
+			{
+				nearm = sum[j] - sum[i - 1];
+			}
+			i++;
+		}
+	}
+	i = 1, j = 1;
+	if (!flag)
+	{
+		while (i <= n&&j <= n)
+		{
+			if (sum[j] - sum[i - 1] < nearm) j++;
+			else if (sum[j] - sum[i - 1] == nearm)
+			{
+				printf("%d-%d\n", i, j);
+				i++;
+			}
+			else if (sum[j] - sum[i - 1] > nearm) i++;
+		}
+	}
+	return 0;
+}
