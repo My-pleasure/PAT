@@ -1,0 +1,60 @@
+#include <iostream>
+using namespace std;
+int N, M, heap[1005], num = 0;
+bool maxheap(int root)
+{
+	if (root > M) return true;
+	int lchild = root * 2 , rchild = root * 2 + 1;
+	if (lchild<=M&&heap[root] < heap[lchild]) return false;
+	if (rchild<=M&&heap[root] < heap[rchild]) return false;
+	return maxheap(lchild) && maxheap(rchild);
+}
+bool minheap(int root)
+{
+	if (root > M) return true;
+	int lchild = root * 2 , rchild = root * 2 + 1;
+	if (lchild <= M&&heap[root] > heap[lchild]) return false;
+	if (rchild <= M&&heap[root] > heap[rchild]) return false;
+	return minheap(lchild) && minheap(rchild);
+}
+void postOrder(int root)
+{
+	int lchild = root * 2, rchild = root * 2 + 1;
+	if (lchild <= M) postOrder(lchild);
+	if (rchild <= M) postOrder(rchild);
+	if (num != 0) printf(" ");
+	printf("%d", heap[root]);
+	num++;
+}
+int main()
+{
+	scanf("%d%d", &N, &M);
+	for (int i = 0; i < N; ++i)
+	{
+		num = 0;
+		for (int j = 1; j <= M; ++j)
+		{
+			scanf("%d", &heap[j]);
+		}
+		if (maxheap(1))
+		{
+			printf("Max Heap\n");
+			postOrder(1);
+			printf("\n");
+			continue;
+		}
+		else if (minheap(1))
+		{
+			printf("Min Heap\n");
+			postOrder(1);
+			printf("\n");
+			continue;
+		}
+		else
+		{
+			printf("Not Heap\n");
+			postOrder(1);
+			printf("\n");
+		}
+	}
+}
