@@ -1,0 +1,24 @@
+#include <iostream>
+#include<string>
+using namespace std;
+int main()
+{
+	int cnt = 0, numLeftP[100005] = { 0 }, numRightT = 0;
+	string s;
+	cin >> s;
+	int len = s.length();
+	for (int i = 0; i < len; ++i)
+	{
+		if (i != 0)
+		{
+			numLeftP[i] = numLeftP[i - 1];
+		}
+		if (s[i] == 'P') numLeftP[i]++;
+	}
+	for (int i = len - 1; i > 0; --i)
+	{
+		if (s[i] == 'T') numRightT++;
+		if (s[i] == 'A') cnt = (cnt + numLeftP[i] * numRightT) % 1000000007;
+	}
+	printf("%d", cnt);
+}
