@@ -1,3 +1,4 @@
+//DFS
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -79,5 +80,78 @@ int main()
 		else if (aisb) printf("%d is an ancestor of %d.\n", a, b);
 		else if (bisa) printf("%d is an ancestor of %d.\n", b, a);
 		else printf("LCA of %d and %d is %d.\n", a, b, anc);
+	}
+}
+
+
+//递归法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+vector<int> in, pre;
+int M, N, anc, a, b;
+bool isa, isb, vis[10005], flag;
+bool searchtong(int inL, int inR)
+{
+	bool havea = false, haveb = false;
+	for (int i = inL; i <= inR; ++i)
+	{
+		if (in[i] == a) havea = true;
+		if (in[i] == b) haveb = true;
+	}
+	if (havea&&haveb) return true;
+	return false;
+}
+void findAnc(int inL,int inR,int preL,int preR)
+{
+	anc = pre[preL];
+	if (anc == a)
+	{
+		printf("%d is an ancestor of %d.\n", a, b);
+		flag = true;
+		return;
+	}
+	if (anc == b)
+	{
+		printf("%d is an ancestor of %d.\n", b, a);
+		flag = true;
+		return;
+	}
+	int k;
+	for (k = inL; k <= inR; ++k)
+	{
+		if (in[k] == anc) break;
+	}
+	int numLeft = k - inL;
+	if (!flag&&searchtong(inL, k - 1)) findAnc(inL, k - 1, preL + 1, preL + numLeft);
+	else if (!flag&&searchtong(k + 1, inR)) findAnc(k + 1, inR, preL + numLeft + 1, preR);
+	else if(!flag) printf("LCA of %d and %d is %d.\n", a, b, anc);
+}
+int main()
+{
+	int temp;
+	scanf_s("%d%d", &M, &N);
+	for (int i = 1; i <= N; ++i)
+	{
+		scanf_s("%d", &temp);
+		pre.push_back(temp);
+	}
+	in = pre;
+	sort(in.begin(), in.end());
+	for (int i = 0; i < M; ++i)
+	{
+		scanf_s("%d%d", &a, &b);
+		isa = true; isb = true; flag = false;
+		fill(vis, vis + 10005, false);
+		if (find(pre.begin(), pre.end(), a) == pre.end()) isa = false;
+		if (find(pre.begin(), pre.end(), b) == pre.end()) isb = false;
+		if (!isa && !isb) printf("ERROR: %d and %d are not found.\n", a, b);
+		else if (!isa&&isb) printf("ERROR: %d is not found.\n", a);
+		else if (isa && !isb) printf("ERROR: %d is not found.\n", b);
+		else
+		{
+			findAnc(0, in.size() - 1, 0, pre.size() - 1);
+		}
 	}
 }
