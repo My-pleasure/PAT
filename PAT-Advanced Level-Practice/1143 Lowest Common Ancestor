@@ -1,0 +1,33 @@
+#include<iostream>
+#include<vector>
+#include<map>
+using namespace std;
+int M, N;
+map<int, bool> m;
+int main()
+{
+	int a, b, anc;
+	scanf("%d%d", &M, &N);
+	vector<int> pre(N);
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d", &pre[i]);
+		m[pre[i]] = true;
+	}
+	for (int i = 0; i < M; ++i)
+	{
+		scanf("%d%d", &a, &b);
+		for (int j = 0; j < pre.size(); ++j)
+		{
+			if ((pre[j] >= a&&pre[j] <= b) || (pre[j] >= b&&pre[j] <= a))
+			{
+				anc = pre[j];
+				break;
+			}
+		}
+		if(m[a]==false&&m[b]==false) printf("ERROR: %d and %d are not found.\n", a, b);
+		else if (m[a] == false || m[b] == false) printf("ERROR: %d is not found.\n", m[a] == false ? a : b);
+		else if (anc == a || anc == b) printf("%d is an ancestor of %d.\n", anc, anc == a ? b : a);
+		else printf("LCA of %d and %d is %d.\n", a, b, anc);
+	}
+}
