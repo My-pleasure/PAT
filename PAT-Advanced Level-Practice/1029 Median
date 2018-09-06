@@ -1,0 +1,37 @@
+#include<iostream>
+using namespace std;
+const int maxn=200005;
+const int INF=0x7fffffff;
+int a[maxn];
+int main()
+{
+	int na, nb,temp;
+	int j=1,cnt=0;
+	scanf("%d", &na);
+	for (int i = 1; i <= na; ++i)
+	{
+		scanf("%d", &a[i]);
+	}
+	a[na+1]=INF;
+	scanf("%d", &nb);
+	int mid = (na + nb+1) / 2;
+	for (int i = 1; i <=nb; ++i)
+	{
+		scanf("%d", &temp);
+		while(a[j]<temp)
+	  {
+	    cnt++;
+	    if(cnt==mid) cout<<a[j];
+	    j++;
+	  }
+	  cnt++;
+	  if(cnt==mid) cout<<temp;
+	}
+	while(j<na)
+	{
+	  cnt++;
+	  if(cnt==mid) cout<<a[j];
+	  j++;
+	}
+	return 0;
+}
