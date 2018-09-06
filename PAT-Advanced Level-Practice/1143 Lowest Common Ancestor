@@ -1,0 +1,83 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+struct node
+{
+	int data;
+	node* lchild;
+	node* rchild;
+};
+int M, N;
+vector<int> patha, pathb, tempPath;
+void build(node* &root, int x)
+{
+	if (root == NULL)
+	{
+		root = new node;
+		root->data = x;
+		root->lchild = root->rchild = NULL;
+		return;
+	}
+	if (x < root->data)
+	{
+		build(root->lchild, x);
+	}
+	else
+	{
+		build(root->rchild, x);
+	}
+}
+void DFS(node* root,int a,int b)
+{
+	if (root == NULL) return;
+	tempPath.push_back(root->data);
+	if (root->data == a)
+	{
+		patha = tempPath;
+	}
+	if (root->data == b)
+	{
+		pathb = tempPath;
+	}
+	if (!patha.size() && !pathb.size()) return;
+	DFS(root->lchild, a, b);
+	DFS(root->rchild, a, b);
+	tempPath.pop_back();
+}
+int main()
+{
+	int temp, a, b, anc;
+	bool isa, isb, aisb, bisa;
+	node* root = new node;
+	root = NULL;
+	scanf_s("%d%d", &M, &N);
+	for (int i = 0; i < N; ++i)
+	{
+		scanf_s("%d", &temp);
+		build(root, temp);
+	}
+	for (int i = 0; i < M; ++i)
+	{
+		scanf_s("%d%d", &a, &b);
+		patha.clear();
+		pathb.clear();
+		tempPath.clear();
+		isa = true; isb = true; aisb = false; bisa = false;
+		DFS(root, a, b);
+		for (int j = 0; j < patha.size() && j < pathb.size(); ++j)
+		{
+			if (patha[j] == pathb[j]) anc = patha[j];
+			else break;
+		}
+		if (patha.size() == 0) isa = false;
+		if (pathb.size() == 0) isb = false;
+		if (find(patha.begin(), patha.end(), b) != patha.end()) bisa = true;
+		if (find(pathb.begin(), pathb.end(), a) != pathb.end()) aisb = true;
+		if (!isa && !isb) printf("ERROR: %d and %d are not found.\n", a, b);
+		else if (!isa&&isb) printf("ERROR: %d is not found.\n", a);
+		else if (isa && !isb) printf("ERROR: %d is not found.\n", b);
+		else if (aisb) printf("%d is an ancestor of %d.\n", a, b);
+		else if (bisa) printf("%d is an ancestor of %d.\n", b, a);
+		else printf("LCA of %d and %d is %d.\n", a, b, anc);
+	}
+}
