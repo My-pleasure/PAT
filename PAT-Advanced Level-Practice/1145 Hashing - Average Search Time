@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+#include<cmath>
+using namespace std;
+int msize, N, M;
+int hashtable[100005] = { 0 };
+bool isPrime(int m)
+{
+	int sqr = sqrt(m);
+	for (int i = 2; i <= sqr; ++i)
+	{
+		if (m % i == 0) return false;
+	}
+	return true;
+}
+int main()
+{
+	int temp;
+	scanf("%d%d%d", &msize, &N, &M);
+	while (!isPrime(msize)) ++msize;
+	for (int i = 0; i < N; ++i)
+	{
+		scanf("%d", &temp);
+		int flag = 0;
+		for (int j = 0; j <= msize; ++j)
+		{
+			int x = (temp + j*j) % msize;
+			if (hashtable[x] == 0)
+			{
+				hashtable[x] = temp;
+				flag = 1;
+				break;
+			}
+		}
+		if (!flag) printf("%d cannot be inserted.\n", temp);
+	}
+	int ans = 0;
+	for (int i = 0; i < M; ++i)
+	{
+		scanf("%d", &temp);
+		for (int j = 0; j <= msize; ++j)
+		{
+			int x = (temp + j*j) % msize;
+			ans++;
+			if (hashtable[x] == temp || hashtable[x] == 0) break;
+		}
+	}
+	printf("%.1lf\n", ans*1.0/M);
+}
