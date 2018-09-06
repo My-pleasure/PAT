@@ -1,0 +1,46 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int N, M, K;
+vector<int> vi[1005], test;
+int main()
+{
+	int u, v, num = 0;
+	bool flag;
+	scanf("%d%d", &N, &M);
+	for (int i = 0; i < M; ++i)
+	{
+		scanf("%d%d", &u, &v);
+		vi[u].push_back(v);
+	}
+	scanf("%d", &K);
+	for (int i = 0; i < K; ++i)
+	{
+	  test.clear();
+		for (int j = 0; j < N; ++j)
+		{
+			scanf("%d", &u);
+			test.push_back(u);
+		}
+		flag = true;
+		for (int j = 0; j < N&&flag; ++j)
+		{
+			int now = test[j];
+			for (int k = 0; k < vi[now].size(); ++k)
+			{
+				if (find(test.begin() + j, test.end(), vi[now][k]) == test.end())
+				{
+					flag = false;
+					break;
+				}
+			}
+		}
+		if (!flag)
+		{
+			if (num != 0) printf(" ");
+			printf("%d", i);
+			++num;
+		}
+	}
+}
