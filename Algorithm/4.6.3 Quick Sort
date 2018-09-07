@@ -1,0 +1,30 @@
+#include<iostream>
+using namespace std;
+int n;
+int Partition(int A[], int left, int right)
+{
+	int temp = A[left];
+	int i = left, j = right;
+	while (left < right)
+	{
+		while (left < right&&temp < A[right]) right--;
+		A[left] = A[right];
+		while (left < right&&temp >= A[left]) left--;
+		A[right] = A[left];
+	}
+	A[left] = temp;
+	return left;
+}
+void quicksort(int A[], int left, int right)
+{
+	if (left < right)
+	{
+		int pos = Partition(A, left, right);
+		quicksort(A, left, pos - 1);
+		quicksort(A, pos + 1, right);
+	}
+}
+int main()
+{
+
+}
