@@ -1,0 +1,54 @@
+#include<iostream>
+using namespace std;
+const int maxn = 100;
+int n;
+//归并排序
+void merge(int A[], int L1, int L2, int R1, int R2)
+{
+	int i = L1, j = R1;
+	int temp[maxn], index = 0;
+	while (i <= L2&&j <= R2)
+	{
+		if (A[i] <= A[j])
+		{
+			temp[index++] = A[i++];
+		}
+		else temp[index++] = A[j++];
+	}
+	while (i <= L2) temp[index++] = A[i++];
+	while (j <= R2) temp[index++] = A[j++];
+	for (int i = 0; i < index; ++i)
+	{
+		A[L1 + i] = temp[i];
+	}
+}
+//递归
+void mergesort(int A[], int left, int right)
+{
+	if (left < right)
+	{
+		int mid = (left + right) / 2;
+		mergesort(A, left, mid);
+		mergesort(A, mid + 1, right);
+		merge(A, left, mid, mid + 1, right);
+	}
+}
+//非递归
+void mergesortf(int A[])
+{
+	for (int step = 2; step / 2 <= n; step *= 2)
+	{
+		for (int i = 1; i <= n; i += step)
+		{
+			int mid = i + step / 2 - 1;
+			if (mid + 1 <= n)
+			{
+				merge(A, i, mid, mid + 1, min(i + step / 2 - 1, n));
+			}
+		}
+	}
+}
+int main()
+{
+
+}
