@@ -1,0 +1,68 @@
+#include<iostream>
+#include<queue>
+#include<algorithm>
+using namespace std;
+const int maxn = 1005;
+const int INF = 100000000;
+struct Window
+{
+	int endTime, popTime;
+	queue<int> q;
+}win[20];
+int converTime(int h, int m)
+{
+	return h * 60 + m;
+}
+int ans[maxn], needTime[maxn];
+int N, M, K, Q, q;
+int main()
+{
+	int index = 0;
+	scanf("%d%d%d%d", &N, &M, &K, &Q);
+	for (int i = 0; i < K; ++i)
+	{
+		scanf("%d", &needTime[i]);
+	}
+	for (int i = 0; i < N; ++i)
+	{
+		win[i].endTime = win[i].popTime = converTime(8, 0);
+	}
+	for (int i = 0; i < min(N*M, K); ++i)
+	{
+		win[index%N].q.push(index);
+		win[index%N].endTime += needTime[index];
+		if (index < N) win[index].popTime = needTime[index];
+		ans[index] = win[index%N].endTime;
+		index++;
+	}
+	for (; index < K; index++)
+	{
+		int u = -1, MIN = INF;
+		for (int i = 0; i < N; ++i)
+		{
+			if (win[i].popTime < MIN)
+			{
+				u = i;
+				MIN = win[i].popTime;
+			}
+		}
+		Window& W = win[u];
+		W.q.pop();
+		W.q.push(index);
+		W.endTime += needTime[index];
+		W.popTime += needTime[W.q.front()];
+		ans[index] = W.endTime;
+	}
+	for (int i = 0; i < Q; ++i)
+	{
+		scanf("%d", &q);
+		if (ans[q - 1] - needTime[q - 1] >= converTime(17, 0))
+		{
+			printf("Sorry\n");
+		}
+		else
+		{
+			printf("%02d:%02d\n", ans[q - 1] / 60, ans[q - 1] % 60);
+		}
+	}
+}
