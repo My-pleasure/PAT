@@ -1,0 +1,67 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+const int K = 105;
+const int INF = 100000000;
+struct Customer
+{
+	int cometime, servetime;
+}newcustomer;
+int endtime[K];
+int ConverTime(int h, int m, int s)
+{
+	return 3600 * h + 60 * m + s;
+}
+bool cmp(Customer a, Customer b)
+{
+	return a.cometime < b.cometime;
+}
+vector<Customer> custom;
+int main()
+{
+	int stTime = ConverTime(8, 0, 0);
+	int edTime = ConverTime(17, 0, 0);
+	int c, w;
+	scanf("%d%d", &c, &w);
+	for (int i = 0; i < w; ++i)
+	{
+		endtime[i] = stTime;
+	}
+	for (int i = 0; i < c; ++i)
+	{
+		int h, m, s, serveTime;
+		scanf("%d:%d:%d %d", &h, &m, &s, &serveTime);
+		int comeTime = ConverTime(h, m, s);
+		if (comeTime >= edTime) continue;
+		newcustomer.cometime = comeTime;
+		newcustomer.servetime = serveTime < 60 ? serveTime * 60 : 3600;
+		custom.push_back(newcustomer);
+	}
+	sort(custom.begin(), custom.end(),cmp);
+	int tottime = 0;
+	for (int i = 0; i < custom.size(); ++i)
+	{
+		int u = -1, MIN = INF;
+		for (int j = 0; j < w; ++j)
+		{
+			if (endtime[j] < MIN)
+			{
+				u = j;
+				MIN = endtime[j];
+			}
+		}
+		if (endtime[u] <= custom[i].cometime)
+		{
+			endtime[u] = custom[i].servetime + custom[i].cometime;
+		}
+		else
+		{
+			tottime += endtime[u] - custom[i].cometime;
+			endtime[u] += custom[i].servetime;
+		}
+	}
+	if (custom.size() == 0) printf("0.0");
+	else printf("%.1f", tottime / 60.0 / custom.size());
+	return 0;
+}
