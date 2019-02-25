@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int N,d[100005],temp,M;
+    int sum=0,a,b,ans,anst;
+    d[0]=0;
+    scanf("%d",&N);
+    for(int i=1;i<=N;++i){
+        scanf("%d",&temp);
+        sum+=temp;
+        d[i]=sum;
+    }
+    scanf("%d",&M);
+    for(int i=0;i<M;++i){
+        scanf("%d%d",&a,&b);
+        if(a>b){
+            temp=a;
+            a=b;
+            b=temp;
+        }
+        ans=d[b-1]-d[a-1];
+        anst=sum-ans;
+        cout<<((ans<anst)?ans:anst)<<endl;
+    }
+}
